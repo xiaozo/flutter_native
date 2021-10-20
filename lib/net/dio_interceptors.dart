@@ -47,20 +47,7 @@ void _buildSignHeader(RequestOptions options, String baseUrl,
   options.headers[_signHeader] = _sign(source);
 }
 
-class _Transformer extends DefaultTransformer {
-  final String baseUrl;
-
-  _Transformer(this.baseUrl);
-
-  @override
-  Future<String> transformRequest(RequestOptions options) {
-    return super.transformRequest(options).then((value) {
-      _buildSignHeader(options, baseUrl, body: value);
-      return value;
-    });
-  }
-}
-
+////鹿优课请求处理拦截器
 class DeerclassHttpInterceptor extends Interceptor {
   DeerclassHttpInterceptor({
     this.signBody = false,
@@ -70,6 +57,10 @@ class DeerclassHttpInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    options
+      ..headers["app_version"] = getIt<NetConfigRepo>().versionCode
+      ..headers["system_number"] = Platform.isAndroid ? "5796454" : "4538567";
+
     // TODO: implement onRequest
     final baseUrl = getIt<NetConfigRepo>().mainUrl;
     // 实时更新
@@ -116,21 +107,42 @@ class DeerclassHttpInterceptor extends Interceptor {
   }
 }
 
+////九色鹿请求处理拦截器
+class JslHttpInterceptor extends Interceptor {
+  JslHttpInterceptor();
+
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    handler.next(options);
+  }
+
+  @override
+  void onResponse(Response resp, ResponseInterceptorHandler handler) {
+    if (resp.data is Map<String, dynamic>) {
+      try {
+        final errorCode = resp.data["error_code"];
+        final message = resp.data["message"]?.toString();
+
+        if (errorCode == 0) {
+          handler.next(resp);
+        } else {
+          handler.reject(DioError(
+              requestOptions: resp.requestOptions,
+              error: AppServiceException(
+                  message: message, code: errorCode as int)));
+        }
+      } catch (e) {}
+    }
+  }
+}
+
 extension Configuartion on Dio {
   void build({bool signBody = true}) {
-    options
-      ..headers["app_version"] = getIt<NetConfigRepo>().versionCode
-      ..headers["system_number"] = Platform.isAndroid ? "5796454" : "4538567";
-
-    final baseUrl = getIt<NetConfigRepo>().mainUrl;
-
     interceptors.add(DeerclassHttpInterceptor(signBody: signBody));
 
     if (kDebugMode) {
       interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
     }
-
-    transformer = _Transformer(baseUrl);
   }
 }
 
