@@ -61,6 +61,61 @@ class _Transformer extends DefaultTransformer {
   }
 }
 
+class DeerclassHttpInterceptor extends Interceptor {
+  DeerclassHttpInterceptor({
+    this.signBody = false,
+  });
+
+  bool signBody;
+
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    // TODO: implement onRequest
+    final baseUrl = getIt<NetConfigRepo>().mainUrl;
+    // 实时更新
+    final token = getIt<NetConfigRepo>().token;
+    options.headers["token"] = token;
+
+    // 空包体处理
+    if (options.method == "GET" || options.data == null || !signBody) {
+      _buildSignHeader(options, baseUrl);
+    } else {
+      final skipSignBody = options.headers.containsKey(skipSignBodyHeader);
+      if (skipSignBody) {
+        options.headers.remove(skipSignBodyHeader);
+        _buildSignHeader(options, baseUrl);
+      }
+    }
+    handler.next(options);
+  }
+
+  @override
+  void onResponse(Response resp, ResponseInterceptorHandler handler) {
+    if (resp.data is Map<String, dynamic>) {
+      try {
+        final errorCode = resp.data["error_code"];
+        final message = resp.data["message"]?.toString();
+        if (errorCode == 20000 || errorCode == 20001) {
+          if (getIt<NetConfigRepo>().tokenExpire()) {
+            NetHostApi().tokenExpire();
+          }
+        } else if (errorCode == 20003 || errorCode == 20004) {
+          NetHostApi().studentInvalid(ErrorMessage()..message = message);
+        }
+
+        if (errorCode == 0) {
+          handler.next(resp);
+        } else {
+          handler.reject(DioError(
+              requestOptions: resp.requestOptions,
+              error: AppServiceException(
+                  message: message, code: errorCode as int)));
+        }
+      } catch (e) {}
+    }
+  }
+}
+
 extension Configuartion on Dio {
   void build({bool signBody = true}) {
     options
@@ -68,49 +123,9 @@ extension Configuartion on Dio {
       ..headers["system_number"] = Platform.isAndroid ? "5796454" : "4538567";
 
     final baseUrl = getIt<NetConfigRepo>().mainUrl;
-    interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        // 实时更新
-        final token = getIt<NetConfigRepo>().token;
-        options.headers["token"] = token;
 
-        // 空包体处理
-        if (options.method == "GET" || options.data == null || !signBody) {
-          _buildSignHeader(options, baseUrl);
-        } else {
-          final skipSignBody = options.headers.containsKey(skipSignBodyHeader);
-          if (skipSignBody) {
-            options.headers.remove(skipSignBodyHeader);
-            _buildSignHeader(options, baseUrl);
-          }
-        }
-        handler.next(options);
-      },
-      onResponse: (resp, handler) {
-        if (resp.data is Map<String, dynamic>) {
-          try {
-            final errorCode = resp.data["error_code"];
-            final message = resp.data["message"]?.toString();
-            if (errorCode == 20000 || errorCode == 20001) {
-              if (getIt<NetConfigRepo>().tokenExpire()) {
-                NetHostApi().tokenExpire();
-              }
-            } else if (errorCode == 20003 || errorCode == 20004) {
-              NetHostApi().studentInvalid(ErrorMessage()..message = message);
-            }
+    interceptors.add(DeerclassHttpInterceptor(signBody: signBody));
 
-            if (errorCode == 0) {
-              handler.next(resp);
-            } else {
-              handler.reject(DioError(
-                  requestOptions: resp.requestOptions,
-                  error: AppServiceException(
-                      message: message, code: errorCode as int)));
-            }
-          } catch (e) {}
-        }
-      },
-    ));
     if (kDebugMode) {
       interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
     }
