@@ -98,14 +98,14 @@ class _WaveSlice extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular((_fixWidth / 2).h),
+          borderRadius: BorderRadius.circular((_fixWidth / 2).as),
         ),
       ),
       builder: (context, child) {
         return SizedBox(
-          width: _fixWidth.h,
+          width: _fixWidth.as,
           // 改变高度
-          height: (startHeight + (endHeight - startHeight) * _progress).h,
+          height: (startHeight + (endHeight - startHeight) * _progress).as,
           child: child,
         );
       },
