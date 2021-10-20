@@ -1,0 +1,17 @@
+include: package:lint/analysis_options.yaml
+
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+
+linter:
+  rules:
+    sort_pub_dependencies: false
+    type_annotate_public_apis: false
+    empty_catches: false
+    prefer_typing_uninitialized_variables: true
+    exclude:
+      - "**/*.g.dart"
+      - "**/*.freezed.dart"

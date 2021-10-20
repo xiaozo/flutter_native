@@ -1,0 +1,39 @@
+
+Example: 
+flutter pub run pigeon \
+  --input pigeons/message.dart \
+  --dart_out lib/pigeon.dart \
+  --objc_header_out ios/Runner/pigeon.h \
+  --objc_source_out ios/Runner/pigeon.m \
+  --java_out ./android/app/src/main/java/dev/flutter/pigeon/Pigeon.java \
+  --java_package "dev.flutter.pigeon"
+
+// NetApi Android 参考命令
+flutter pub run pigeon \
+  --dart_null_safety \
+  --input pigeons/net_api.dart \
+  --dart_out lib/channel/net_channel.dart \
+  --java_out ../app/src/main/java/com/histudio/app/flutter/NetChannel.java \
+  --java_package "com.histudio.app.flutter"
+
+  flutter pub run pigeon \
+  --dart_null_safety \
+  --input pigeons/user_api.dart \
+  --dart_out lib/channel/user_channel.dart \
+  --java_out ../app/src/main/java/com/histudio/app/flutter/UserChannel.java \
+  --java_package "com.histudio.app.flutter"
+
+  flutter pub run pigeon \
+  --dart_null_safety \
+  --input pigeons/audio_api.dart \
+  --dart_out lib/channel/audio_channel.dart \
+  --java_out ../app/src/main/java/com/histudio/app/flutter/AudioChannel.java \
+  --java_package "com.histudio.app.flutter"
+
+  flutter pub run pigeon \
+  --dart_null_safety \
+  --input pigeons/route_api.dart \
+  --dart_out lib/channel/route_channel.dart \
+  --java_out ../app/src/main/java/com/histudio/app/flutter/RouteChannel.java \
+  --java_package "com.histudio.app.flutter"
+
