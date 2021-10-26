@@ -26,8 +26,7 @@ class CommonBasePage extends StatelessWidget {
       widgets.add(Consumer(builder: (context, watch, _) {
         LoadingState state = watch(loadingStateNotifierProvider!);
         return state.isLoading
-            ? Positioned(
-                child: Container(
+            ? Container(
                 color: Colors.transparent,
                 child: Align(
                   child: ClipRRect(
@@ -43,7 +42,7 @@ class CommonBasePage extends StatelessWidget {
                     ),
                   ),
                 ),
-              ))
+              )
             : Container(
                 width: 0,
                 height: 0,
