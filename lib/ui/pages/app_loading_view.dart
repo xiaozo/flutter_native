@@ -25,8 +25,8 @@ class LoadingViewModel extends StateNotifier<LoadingState> {
 }
 
 mixin LoadingViewMix {
-  LoadingViewModel lvm = LoadingViewModel(LoadingState(false));
-  late AutoDisposeStateNotifierProvider<LoadingViewModel, LoadingState>
+  late LoadingViewModel? _lvm = LoadingViewModel(LoadingState(false));
+  late AutoDisposeStateNotifierProvider<LoadingViewModel, LoadingState>?
       _stateNotifierProvider;
 
   AutoDisposeStateNotifierProvider<LoadingViewModel, LoadingState>
@@ -34,16 +34,23 @@ mixin LoadingViewMix {
     if (_stateNotifierProvider == null) {
       _stateNotifierProvider =
           AutoDisposeStateNotifierProvider<LoadingViewModel, LoadingState>(
-              (_) => lvm);
+              (ref) {
+        ref.onDispose(() {
+          _stateNotifierProvider = null;
+          _lvm = null;
+        });
+        _lvm = _lvm ?? LoadingViewModel(LoadingState(false));
+        return _lvm!;
+      });
     }
-    return _stateNotifierProvider;
+    return _stateNotifierProvider!;
   }
 
   showLoading() {
-    lvm.show();
+    _lvm?.show();
   }
 
   hiddenLoading() {
-    lvm.hidden();
+    _lvm?.hidden();
   }
 }
