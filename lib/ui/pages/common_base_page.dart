@@ -6,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CommonBasePage extends StatelessWidget {
   final Widget child;
-  final AutoDisposeStateNotifierProvider<LoadingViewModel, LoadingState>?
+  final StateNotifierProvider<LoadingViewModel, LoadingState>?
       loadingStateNotifierProvider;
 
   final PageState pageState;

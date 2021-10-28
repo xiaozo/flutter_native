@@ -26,15 +26,14 @@ class LoadingViewModel extends StateNotifier<LoadingState> {
 
 mixin LoadingViewMix {
   LoadingViewModel lvm = LoadingViewModel(LoadingState(false));
-  late AutoDisposeStateNotifierProvider<LoadingViewModel, LoadingState>
+  late StateNotifierProvider<LoadingViewModel, LoadingState>
       _stateNotifierProvider;
 
-  AutoDisposeStateNotifierProvider<LoadingViewModel, LoadingState>
+  StateNotifierProvider<LoadingViewModel, LoadingState>
       loadingStateNotifierProvider() {
     if (_stateNotifierProvider == null) {
       _stateNotifierProvider =
-          AutoDisposeStateNotifierProvider<LoadingViewModel, LoadingState>(
-              (_) => lvm);
+          StateNotifierProvider<LoadingViewModel, LoadingState>((_) => lvm);
     }
     return _stateNotifierProvider;
   }
