@@ -19,7 +19,10 @@ class _FloatHeadModel {
 }
 
 class _FloatHeadRange {
+  ///该setion的开始index（不包含topview）
   final int bindex;
+
+  ///该setion的结束index（不包含topview）
   final int eindex;
 
   _FloatHeadRange(this.bindex, this.eindex);
@@ -115,6 +118,11 @@ class _FloatHeaderListState extends State<FloatHeaderList> {
     int index = 0;
     double offset = _scrollController.offset;
     for (GlobalKey key in _keys) {
+      if (key.currentContext == null) {
+        ///如果没有得到  就清掉header 不展示header
+        _headerPostions.clear();
+        break;
+      }
       double nextDy = double.maxFinite;
 
       RenderBox renderBox = key.currentContext!.findRenderObject() as RenderBox;
