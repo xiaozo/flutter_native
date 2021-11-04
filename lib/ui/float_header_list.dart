@@ -29,13 +29,13 @@ class FloatHeaderList extends StatefulWidget {
   final List<List> datas;
   final FloatHeaderListCellBuilder floatHeaderListCellBuilder;
   final FloatHeaderListHeaderBuilder floatHeaderListHeaderBuilder;
-  final FloatHeaderListTopBuilder floatHeaderListTopBuilder;
+  final FloatHeaderListTopBuilder? floatHeaderListTopBuilder;
 
   FloatHeaderList({
-    Key key,
-    this.datas,
-    this.floatHeaderListCellBuilder,
-    this.floatHeaderListHeaderBuilder,
+    Key? key,
+    required this.datas,
+    required this.floatHeaderListCellBuilder,
+    required this.floatHeaderListHeaderBuilder,
     this.floatHeaderListTopBuilder,
   }) : super(key: key);
 
@@ -49,13 +49,13 @@ class FloatHeaderList extends StatefulWidget {
 class _FloatHeaderListState extends State<FloatHeaderList> {
   final GlobalKey globalKey = GlobalKey();
   // ignore: deprecated_member_use
-  final List<GlobalKey> _keys = new List();
+  final List<GlobalKey> _keys = [];
 
   // ignore: deprecated_member_use
-  final List<_FloatHeadModel> _headerPostions = new List();
+  final List<_FloatHeadModel> _headerPostions = [];
 
   // ignore: deprecated_member_use
-  final List<_FloatHeadRange> _headerHeadRanges = new List();
+  final List<_FloatHeadRange> _headerHeadRanges = [];
 
   int get _listTopWidgetCount {
     return widget.floatHeaderListTopBuilder != null ? 1 : 0;
@@ -75,15 +75,15 @@ class _FloatHeaderListState extends State<FloatHeaderList> {
 
     // print(_scrollController);
     _configData();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       _configHeaderData();
     });
   }
 
   @override
-  void didUpdateWidget(Widget oldWidget) {
+  void didUpdateWidget(FloatHeaderList oldWidget) {
     _configData();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       _configHeaderData();
     });
     super.didUpdateWidget(oldWidget);
@@ -117,23 +117,23 @@ class _FloatHeaderListState extends State<FloatHeaderList> {
     for (GlobalKey key in _keys) {
       double nextDy = double.maxFinite;
 
-      RenderBox renderBox = key.currentContext.findRenderObject() as RenderBox;
+      RenderBox renderBox = key.currentContext!.findRenderObject() as RenderBox;
 
       final size = renderBox.size;
       double dy = renderBox
               .localToGlobal(Offset.zero,
-                  ancestor: globalKey.currentContext.findRenderObject())
+                  ancestor: globalKey.currentContext!.findRenderObject())
               .dy +
           offset;
 
       if (index + 1 < _keys.length) {
         key = _keys[index + 1];
         RenderBox renderBox =
-            key.currentContext.findRenderObject() as RenderBox;
+            key.currentContext!.findRenderObject() as RenderBox;
 
         nextDy = renderBox
                 .localToGlobal(Offset.zero,
-                    ancestor: globalKey.currentContext.findRenderObject())
+                    ancestor: globalKey.currentContext!.findRenderObject())
                 .dy +
             offset;
       }
@@ -164,7 +164,7 @@ class _FloatHeaderListState extends State<FloatHeaderList> {
                 itemBuilder: (BuildContext context, int index) {
                   if (index == 0 && widget.floatHeaderListTopBuilder != null) {
                     ///头部
-                    return widget.floatHeaderListTopBuilder(context);
+                    return widget.floatHeaderListTopBuilder!(context);
                   }
                   index -= _listTopWidgetCount;
 
