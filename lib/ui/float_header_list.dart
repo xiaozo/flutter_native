@@ -69,6 +69,9 @@ class _FloatHeaderListState extends State<FloatHeaderList> {
   // ignore: deprecated_member_use
   final List<_FloatHeadRange> _headerHeadRanges = [];
 
+  late VoidCallback? checkisAddScrollOffsetListen = null;
+  bool isAddScrollOffset = false;
+
   int get _listTopWidgetCount {
     return widget.floatHeaderListTopBuilder != null ? 1 : 0;
   }
@@ -126,7 +129,7 @@ class _FloatHeaderListState extends State<FloatHeaderList> {
     _headerPostions.clear();
 
     int index = 0;
-    double offset = _scrollController.offset;
+    double offset = isAddScrollOffset == true ? _scrollController.offset : 0;
     for (GlobalKey key in _keys) {
       if (key.currentContext == null) {
         ///如果没有得到  就清掉header 不展示header
@@ -160,6 +163,30 @@ class _FloatHeaderListState extends State<FloatHeaderList> {
 
       index++;
     }
+
+    checkisAddScrollOffsetListen = () {
+      if (_headerPostions.length > 0 && _keys.length > 0) {
+        if (_scrollController.offset > 0) {
+          _FloatHeadModel firstFloatHeadModel = _headerPostions.first;
+          RenderBox renderBox =
+              _keys.first.currentContext!.findRenderObject() as RenderBox;
+
+          double dy = renderBox
+              .localToGlobal(Offset.zero,
+                  ancestor: globalKey.currentContext!.findRenderObject())
+              .dy;
+
+          isAddScrollOffset = dy != firstFloatHeadModel.postion;
+
+          _scrollController.removeListener(checkisAddScrollOffsetListen!);
+          checkisAddScrollOffsetListen = null;
+        }
+      } else {
+        _scrollController.removeListener(checkisAddScrollOffsetListen!);
+        checkisAddScrollOffsetListen = null;
+      }
+    };
+    _scrollController.addListener(checkisAddScrollOffsetListen!);
 
     setState(() {});
   }
