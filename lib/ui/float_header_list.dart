@@ -167,16 +167,7 @@ class _FloatHeaderListState extends State<FloatHeaderList> {
   double _postionTop(_FloatHeadModel floatHeadModel) {
     if (_scrollController.offset <= floatHeadModel.postion &&
         widget.floatHeaderContentWrapWidgetBuilder != null) {
-      RenderBox renderBox = _keys[_headerPostions.indexOf(floatHeadModel)]
-          .currentContext!
-          .findRenderObject() as RenderBox;
-
-      double dy = renderBox
-          .localToGlobal(Offset.zero,
-              ancestor: globalKey1.currentContext!.findRenderObject())
-          .dy;
-
-      return dy;
+      return -9999;
     }
 
     return _scrollController.offset <= floatHeadModel.postion
