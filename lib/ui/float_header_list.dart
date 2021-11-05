@@ -31,8 +31,15 @@ class _FloatHeadRange {
   _FloatHeadRange(this.bindex, this.eindex);
 }
 
+class FloatHeaderListController {
+  double contentInsertTop = 0;
+
+  FloatHeaderListController();
+}
+
 class FloatHeaderList extends StatefulWidget {
   final List<List> datas;
+  final FloatHeaderListController controller;
   final FloatHeaderListCellBuilder floatHeaderListCellBuilder;
   final FloatHeaderListHeaderBuilder floatHeaderListHeaderBuilder;
   final FloatHeaderListTopBuilder? floatHeaderListTopBuilder;
@@ -42,6 +49,7 @@ class FloatHeaderList extends StatefulWidget {
 
   FloatHeaderList({
     Key? key,
+    required this.controller,
     required this.datas,
     required this.floatHeaderListCellBuilder,
     required this.floatHeaderListHeaderBuilder,
@@ -58,7 +66,6 @@ class FloatHeaderList extends StatefulWidget {
 }
 
 class _FloatHeaderListState extends State<FloatHeaderList> {
-  final GlobalKey globalKey1 = GlobalKey();
   final GlobalKey globalKey = GlobalKey();
   // ignore: deprecated_member_use
   final List<GlobalKey> _keys = [];
@@ -194,15 +201,18 @@ class _FloatHeaderListState extends State<FloatHeaderList> {
   }
 
   double _postionTop(_FloatHeadModel floatHeadModel) {
-    if (_scrollController.offset <= floatHeadModel.postion &&
+    double offset = _scrollController.offset;
+    offset -= widget.controller.contentInsertTop;
+
+    if (offset <= floatHeadModel.postion &&
         widget.floatHeaderContentWrapWidgetBuilder != null) {
       return -9999;
     }
 
-    return _scrollController.offset <= floatHeadModel.postion
-        ? floatHeadModel.postion - _scrollController.offset
-        : (_scrollController.offset >= floatHeadModel.epostion
-            ? floatHeadModel.epostion - _scrollController.offset
+    return offset <= floatHeadModel.postion
+        ? floatHeadModel.postion - offset
+        : (offset >= floatHeadModel.epostion
+            ? floatHeadModel.epostion - offset
             : 0);
   }
 
@@ -211,97 +221,88 @@ class _FloatHeaderListState extends State<FloatHeaderList> {
     int currentSection = 0;
 
     // TODO: implement build
-    return Stack(
-        key: globalKey1,
-        children: List.unmodifiable(
-          () sync* {
-            Widget contentWidget = Scrollbar(
-              child: SingleChildScrollView(
-                  key: globalKey,
-                  controller: widget.scrollController == null
-                      ? _scrollController
-                      : null,
-                  child: ListView.builder(
-                    itemCount: _allCount,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (BuildContext context, int index) {
-                      if (index == 0 &&
-                          widget.floatHeaderListTopBuilder != null) {
-                        ///头部
-                        return widget.floatHeaderListTopBuilder!(context);
-                      }
-                      index -= _listTopWidgetCount;
+    return Stack(children: List.unmodifiable(
+      () sync* {
+        Widget contentWidget = Scrollbar(
+          child: SingleChildScrollView(
+              key: globalKey,
+              controller:
+                  widget.scrollController == null ? _scrollController : null,
+              child: ListView.builder(
+                itemCount: _allCount,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (BuildContext context, int index) {
+                  if (index == 0 && widget.floatHeaderListTopBuilder != null) {
+                    ///头部
+                    return widget.floatHeaderListTopBuilder!(context);
+                  }
+                  index -= _listTopWidgetCount;
 
-                      bool isHeader = false;
-                      int section = 0;
-                      int row = 0;
-                      if (_headerHeadRanges[currentSection].bindex <= index &&
-                          _headerHeadRanges[currentSection].eindex >= index) {
-                        section = currentSection;
-                        isHeader =
-                            _headerHeadRanges[currentSection].bindex == index;
-                        row = index -
-                            _headerHeadRanges[currentSection].bindex -
-                            1;
-                      } else {
-                        ///下一项
-                        ///
-                        currentSection++;
-                        section = currentSection;
-                        isHeader =
-                            _headerHeadRanges[currentSection].bindex == index;
-                        row = index -
-                            _headerHeadRanges[currentSection].eindex -
-                            1;
-                      }
+                  bool isHeader = false;
+                  int section = 0;
+                  int row = 0;
+                  if (_headerHeadRanges[currentSection].bindex <= index &&
+                      _headerHeadRanges[currentSection].eindex >= index) {
+                    section = currentSection;
+                    isHeader =
+                        _headerHeadRanges[currentSection].bindex == index;
+                    row = index - _headerHeadRanges[currentSection].bindex - 1;
+                  } else {
+                    ///下一项
+                    ///
+                    currentSection++;
+                    section = currentSection;
+                    isHeader =
+                        _headerHeadRanges[currentSection].bindex == index;
+                    row = index - _headerHeadRanges[currentSection].eindex - 1;
+                  }
 
-                      if (isHeader) {
-                        return Container(
-                          key: _keys[currentSection],
-                          child: widget.floatHeaderListHeaderBuilder(
-                              context, section),
-                        );
-                      }
-                      return widget.floatHeaderListCellBuilder(
-                          context, currentSection, row);
-                    },
-                  )),
-            );
-            if (widget.floatHeaderContentWrapWidgetBuilder != null) {
-              yield widget.floatHeaderContentWrapWidgetBuilder!(
-                  context, contentWidget);
-            } else {
-              yield contentWidget;
-            }
+                  if (isHeader) {
+                    return Container(
+                      key: _keys[currentSection],
+                      child:
+                          widget.floatHeaderListHeaderBuilder(context, section),
+                    );
+                  }
+                  return widget.floatHeaderListCellBuilder(
+                      context, currentSection, row);
+                },
+              )),
+        );
+        if (widget.floatHeaderContentWrapWidgetBuilder != null) {
+          yield widget.floatHeaderContentWrapWidgetBuilder!(
+              context, contentWidget);
+        } else {
+          yield contentWidget;
+        }
 
-            for (var i = 0; i < _headerPostions.length; i++) {
-              _FloatHeadModel headervalue = _headerPostions[i];
-              yield HookBuilder(builder: (BuildContext context) {
-                int section = i;
-                final scrollController = useMemoized(() => _scrollController);
-                final floatHeadModel = useMemoized(() => headervalue);
-                final top = useState(_postionTop(floatHeadModel));
+        for (var i = 0; i < _headerPostions.length; i++) {
+          _FloatHeadModel headervalue = _headerPostions[i];
+          yield HookBuilder(builder: (BuildContext context) {
+            int section = i;
+            final scrollController = useMemoized(() => _scrollController);
+            final floatHeadModel = useMemoized(() => headervalue);
+            final top = useState(_postionTop(floatHeadModel));
 
-                useEffect(() {
-                  VoidCallback listen = () {
-                    top.value = _postionTop(floatHeadModel);
-                  };
+            useEffect(() {
+              VoidCallback listen = () {
+                top.value = _postionTop(floatHeadModel);
+              };
 
-                  scrollController.addListener(listen);
-                  return () {
-                    scrollController.removeListener(listen);
-                  };
-                }, const []);
-                return Positioned(
-                    child:
-                        widget.floatHeaderListHeaderBuilder(context, section),
-                    left: 0,
-                    right: 0,
-                    top: top.value.toDouble());
-              });
-            }
-          }(),
-        ));
+              scrollController.addListener(listen);
+              return () {
+                scrollController.removeListener(listen);
+              };
+            }, const []);
+            return Positioned(
+                child: widget.floatHeaderListHeaderBuilder(context, section),
+                left: 0,
+                right: 0,
+                top: top.value.toDouble());
+          });
+        }
+      }(),
+    ));
   }
 }
