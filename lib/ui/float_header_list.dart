@@ -3,6 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+typedef FloatHeaderContentWrapWidgetBuilder = Widget Function(
+    BuildContext context, Widget child);
+
 typedef FloatHeaderListTopBuilder = Widget Function(BuildContext context);
 
 typedef FloatHeaderListCellBuilder = Widget Function(
@@ -33,6 +36,9 @@ class FloatHeaderList extends StatefulWidget {
   final FloatHeaderListCellBuilder floatHeaderListCellBuilder;
   final FloatHeaderListHeaderBuilder floatHeaderListHeaderBuilder;
   final FloatHeaderListTopBuilder? floatHeaderListTopBuilder;
+  final FloatHeaderContentWrapWidgetBuilder?
+      floatHeaderContentWrapWidgetBuilder;
+  final ScrollController? scrollController;
 
   FloatHeaderList({
     Key? key,
@@ -40,6 +46,8 @@ class FloatHeaderList extends StatefulWidget {
     required this.floatHeaderListCellBuilder,
     required this.floatHeaderListHeaderBuilder,
     this.floatHeaderListTopBuilder,
+    this.floatHeaderContentWrapWidgetBuilder,
+    this.scrollController,
   }) : super(key: key);
 
   @override
@@ -50,6 +58,7 @@ class FloatHeaderList extends StatefulWidget {
 }
 
 class _FloatHeaderListState extends State<FloatHeaderList> {
+  final GlobalKey globalKey1 = GlobalKey();
   final GlobalKey globalKey = GlobalKey();
   // ignore: deprecated_member_use
   final List<GlobalKey> _keys = [];
@@ -70,10 +79,11 @@ class _FloatHeaderListState extends State<FloatHeaderList> {
         : 0;
   }
 
-  final ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
+    _scrollController = widget.scrollController ?? ScrollController();
     super.initState();
 
     // print(_scrollController);
@@ -95,7 +105,7 @@ class _FloatHeaderListState extends State<FloatHeaderList> {
   @override
   void dispose() {
     // TODO: implement dispose
-    _scrollController.dispose();
+    if (widget.scrollController == null) _scrollController.dispose();
     super.dispose();
   }
 
@@ -154,94 +164,124 @@ class _FloatHeaderListState extends State<FloatHeaderList> {
     setState(() {});
   }
 
+  double _postionTop(_FloatHeadModel floatHeadModel) {
+    if (_scrollController.offset <= floatHeadModel.postion &&
+        widget.floatHeaderContentWrapWidgetBuilder != null) {
+      RenderBox renderBox = _keys[_headerPostions.indexOf(floatHeadModel)]
+          .currentContext!
+          .findRenderObject() as RenderBox;
+
+      double dy = renderBox
+          .localToGlobal(Offset.zero,
+              ancestor: globalKey1.currentContext!.findRenderObject())
+          .dy;
+
+      return dy;
+    }
+
+    return _scrollController.offset <= floatHeadModel.postion
+        ? floatHeadModel.postion - _scrollController.offset
+        : (_scrollController.offset >= floatHeadModel.epostion
+            ? floatHeadModel.epostion - _scrollController.offset
+            : 0);
+  }
+
   @override
   Widget build(BuildContext context) {
     int currentSection = 0;
 
     // TODO: implement build
-    return Stack(children: List.unmodifiable(
-      () sync* {
-        yield Scrollbar(
-          child: SingleChildScrollView(
-              key: globalKey,
-              controller: _scrollController,
-              child: ListView.builder(
-                itemCount: _allCount,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (BuildContext context, int index) {
-                  if (index == 0 && widget.floatHeaderListTopBuilder != null) {
-                    ///头部
-                    return widget.floatHeaderListTopBuilder!(context);
-                  }
-                  index -= _listTopWidgetCount;
+    return Stack(
+        key: globalKey1,
+        children: List.unmodifiable(
+          () sync* {
+            Widget contentWidget = Scrollbar(
+              child: SingleChildScrollView(
+                  key: globalKey,
+                  controller: widget.scrollController == null
+                      ? _scrollController
+                      : null,
+                  child: ListView.builder(
+                    itemCount: _allCount,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (BuildContext context, int index) {
+                      if (index == 0 &&
+                          widget.floatHeaderListTopBuilder != null) {
+                        ///头部
+                        return widget.floatHeaderListTopBuilder!(context);
+                      }
+                      index -= _listTopWidgetCount;
 
-                  bool isHeader = false;
-                  int section = 0;
-                  int row = 0;
-                  if (_headerHeadRanges[currentSection].bindex <= index &&
-                      _headerHeadRanges[currentSection].eindex >= index) {
-                    section = currentSection;
-                    isHeader =
-                        _headerHeadRanges[currentSection].bindex == index;
-                    row = index - _headerHeadRanges[currentSection].bindex - 1;
-                  } else {
-                    ///下一项
-                    ///
-                    currentSection++;
-                    section = currentSection;
-                    isHeader =
-                        _headerHeadRanges[currentSection].bindex == index;
-                    row = index - _headerHeadRanges[currentSection].eindex - 1;
-                  }
+                      bool isHeader = false;
+                      int section = 0;
+                      int row = 0;
+                      if (_headerHeadRanges[currentSection].bindex <= index &&
+                          _headerHeadRanges[currentSection].eindex >= index) {
+                        section = currentSection;
+                        isHeader =
+                            _headerHeadRanges[currentSection].bindex == index;
+                        row = index -
+                            _headerHeadRanges[currentSection].bindex -
+                            1;
+                      } else {
+                        ///下一项
+                        ///
+                        currentSection++;
+                        section = currentSection;
+                        isHeader =
+                            _headerHeadRanges[currentSection].bindex == index;
+                        row = index -
+                            _headerHeadRanges[currentSection].eindex -
+                            1;
+                      }
 
-                  if (isHeader) {
-                    return Container(
-                      key: _keys[currentSection],
-                      child:
-                          widget.floatHeaderListHeaderBuilder(context, section),
-                    );
-                  }
-                  return widget.floatHeaderListCellBuilder(
-                      context, currentSection, row);
-                },
-              )),
-        );
+                      if (isHeader) {
+                        return Container(
+                          key: _keys[currentSection],
+                          child: widget.floatHeaderListHeaderBuilder(
+                              context, section),
+                        );
+                      }
+                      return widget.floatHeaderListCellBuilder(
+                          context, currentSection, row);
+                    },
+                  )),
+            );
+            if (widget.floatHeaderContentWrapWidgetBuilder != null) {
+              yield widget.floatHeaderContentWrapWidgetBuilder!(
+                  context, contentWidget);
+            } else {
+              yield contentWidget;
+            }
 
-        for (var i = 0; i < _headerPostions.length; i++) {
-          _FloatHeadModel headervalue = _headerPostions[i];
-          yield HookBuilder(builder: (BuildContext context) {
-            int section = i;
-            final scrollController = useMemoized(() => _scrollController);
-            final floatHeadModel = useMemoized(() => headervalue);
-            final top = useState(
-                scrollController.offset <= floatHeadModel.postion
-                    ? floatHeadModel.postion - scrollController.offset
-                    : (scrollController.offset >= floatHeadModel.epostion
-                        ? floatHeadModel.epostion - scrollController.offset
-                        : 0));
+            for (var i = 0; i < _headerPostions.length; i++) {
+              _FloatHeadModel headervalue = _headerPostions[i];
+              yield HookBuilder(builder: (BuildContext context) {
+                int section = i;
+                final scrollController = useMemoized(() => _scrollController);
+                final floatHeadModel = useMemoized(() => headervalue);
+                final top = useState(_postionTop(floatHeadModel));
 
-            useEffect(() {
-              VoidCallback listen = () {
-                top.value = scrollController.offset <= floatHeadModel.postion
-                    ? floatHeadModel.postion - scrollController.offset
-                    : (scrollController.offset >= floatHeadModel.epostion
-                        ? floatHeadModel.epostion - scrollController.offset
-                        : 0);
-              };
-              scrollController.addListener(listen);
-              return () {
-                scrollController.removeListener(listen);
-              };
-            }, const []);
-            return Positioned(
-                child: widget.floatHeaderListHeaderBuilder(context, section),
-                left: 0,
-                right: 0,
-                top: top.value.toDouble());
-          });
-        }
-      }(),
-    ));
+                useEffect(() {
+                  VoidCallback listen = () {
+                    top.value = _postionTop(floatHeadModel);
+                  };
+
+                  scrollController.addListener(listen);
+                  return () {
+                    scrollController.removeListener(listen);
+                  };
+                }, const []);
+                return Positioned(
+                    child:
+                        widget.floatHeaderListHeaderBuilder(context, section),
+                    left: 0,
+                    right: 0,
+                    top: top.value.toDouble());
+              });
+            }
+          }(),
+        ));
   }
 }
