@@ -70,6 +70,8 @@ class _FloatHeaderListState extends State<FloatHeaderList> {
   final List<_FloatHeadRange> _headerHeadRanges = [];
 
   late VoidCallback? checkisAddScrollOffsetListen = null;
+
+  ///检测计算headerview的位置是否需要加上滚动的ScrollOffset
   bool isAddScrollOffset = false;
 
   int get _listTopWidgetCount {
