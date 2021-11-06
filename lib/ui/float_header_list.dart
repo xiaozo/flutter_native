@@ -32,9 +32,13 @@ class _FloatHeadRange {
 }
 
 class FloatHeaderListController {
+  ///滚动条内切 类似ios tableview contentInsert
   double contentInsertTop = 0;
 
-  FloatHeaderListController();
+  ///是否悬浮header
+  final bool? isFloat;
+
+  FloatHeaderListController({this.isFloat = true});
 }
 
 class FloatHeaderList extends StatefulWidget {
@@ -135,6 +139,8 @@ class _FloatHeaderListState extends State<FloatHeaderList> {
   }
 
   void _configHeaderData() {
+    if (widget.controller.isFloat == false) return;
+
     _headerPostions.clear();
 
     int index = 0;
