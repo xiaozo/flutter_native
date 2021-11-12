@@ -11,9 +11,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'boost.dart';
 import 'channel/debug_channel.dart';
 import 'channel/debug_channel_dump.dart';
+import 'channel/net_channel.dart';
 import 'debug.dart';
 import 'get_it.dart';
 import 'global_context.dart';
+import 'net/net_config_repo.dart';
 import 'provider/rest_client.dart';
 import 'package:flutter_boost/boost_flutter_binding.dart';
 // @pragma('vm:entry-point')
@@ -46,7 +48,7 @@ Future<void> runBoostApp() async {
   debugPaintSizeEnabled = false;
   debugRepaintRainbowEnabled = false;
 
-  // getIt<NetConfigRepo>().update(await NetHostApi().getSecret());
+  getIt<NetConfigRepo>().update(await NetHostApi().getSecret());
 
   runApp(ProviderScope(
       overrides: [
@@ -60,7 +62,10 @@ Future<void> runBoostApp() async {
             navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,
             title: '鹿优课',
-            theme: ThemeData.dark(),
+            theme: new ThemeData(
+              appBarTheme: AppBarTheme(color: Color.fromRGBO(251, 251, 251, 1)),
+              scaffoldBackgroundColor: const Color.fromRGBO(240, 240, 240, 1),
+            ),
             home: Material(
               child: home,
             ),

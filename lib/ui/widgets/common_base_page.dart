@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_deerclass/ui/pages/app_loading_view.dart';
-import 'package:flutter_deerclass/ui/pages/page_state.dart';
+import 'package:flutter_deerclass/ui/widgets/page_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import 'app_loading_view.dart';
 
 class CommonBasePage extends StatelessWidget {
   final Widget child;

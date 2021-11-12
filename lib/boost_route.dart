@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_boost/flutter_boost_app.dart';
 import 'package:flutter_boost/boost_navigator.dart';
-import 'package:flutter_deerclass/ui/appPages/Test.dart';
+import 'package:flutter_deerclass/ui/appPages/test.dart';
 import 'ui/screen.dart';
 
 RoutePageBuilder _wrapSize(RoutePageBuilder builder) {
@@ -21,11 +21,11 @@ Map<String, FlutterBoostRouteFactory> _routerMap = {
       ),
     );
   },
-  '/exercise_record_page': (settings, uniqueId) {
+  '/test_page': (settings, uniqueId) {
     return PageRouteBuilder<dynamic>(
       settings: settings,
       pageBuilder: _wrapSize(
-        (_, __, ___) => ExerciseRecordAudioPage(),
+        (_, __, ___) => TestPage(),
       ),
     );
   },
