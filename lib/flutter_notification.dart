@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_deerclass/channel/notification_info_channel.dart';
 import 'package:flutter_deerclass/event/event_bus.dart';
@@ -17,9 +16,9 @@ class NotificationInfoApiImpl extends NotificationInfoApi {
   @override
   void receiveNotificationInfo(FNotificationInfo arg) {
     // TODO: implement receiveNotificationInfo
-    String notificationName = arg.notificationName;
+    String notificationName = arg.notificationName!;
     Map notificationObject =
-        arg.notificationObject != null ? arg.notificationObject : {};
+        (arg.notificationObject != null ? arg.notificationObject : {})!;
     EventBus.instance
         .emit(notificationName, notificationObject, isSendNative: false);
 
