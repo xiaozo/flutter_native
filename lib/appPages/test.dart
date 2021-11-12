@@ -24,7 +24,6 @@ class _TestPageState extends State<TestPage> {
     return Scaffold(
         appBar: MyAppBar(
           child: GradientAppBar(
-            // backgroundColor: Colors.white,
             elevation: 1.0,
             title: Text(
               "练习",
