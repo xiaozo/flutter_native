@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 export "package:flutter_screenutil/flutter_screenutil.dart";
 
-export '../channel/play_click_audio.dart';
 export 'sp_size.dart';
 
 /// 设置屏幕适配方案
@@ -20,10 +19,10 @@ void dependScreenSize(BuildContext context) {
     ScreenUtil.init(
         BoxConstraints(
             maxWidth: max(width, height), maxHeight: min(width, height)),
-        designSize: const Size(1024, 768),
+        designSize: const Size(375, 843),
         orientation: Orientation.landscape);
   } else {
-    ScreenUtil.init(BoxConstraints(maxWidth: 1024, maxHeight: 768),
-        designSize: const Size(1024, 768), orientation: Orientation.landscape);
+    ScreenUtil.init(BoxConstraints(maxWidth: 375, maxHeight: 843),
+        designSize: const Size(1024, 768), orientation: Orientation.portrait);
   }
 }
