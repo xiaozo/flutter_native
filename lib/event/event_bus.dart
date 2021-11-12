@@ -1,6 +1,4 @@
 //订阅者回调签名
-// @dart=2.9
-import 'package:flutter/material.dart';
 import 'package:flutter_boost/boost_channel.dart';
 
 typedef void EventCallback(Map arg);
@@ -15,24 +13,23 @@ class EventBus {
   var _emap = new Map<Object, List<EventCallback>>();
   //添加订阅者
   void on(String eventName, EventCallback f) {
-    if (eventName == null || f == null) return;
-    _emap[eventName] ??= new List<EventCallback>();
-    _emap[eventName].add(f);
+    _emap[eventName] ??= [];
+    _emap[eventName]!.add(f);
   }
 
   //移除订阅者
-  void off(eventName, [EventCallback f]) {
+  void off(eventName, EventCallback? f) {
     var list = _emap[eventName];
     if (eventName == null || list == null) return;
     if (f == null) {
-      _emap[eventName] = null;
+      _emap.remove(eventName);
     } else {
       list.remove(f);
     }
   }
 
   //触发事件，事件触发后该事件所有订阅者会被调用
-  void emit(String eventName, Map arg, {bool isSendNative = true}) {
+  void emit(String eventName, Map? arg, {bool isSendNative = true}) {
     arg = arg != null ? arg : {};
 
     if (isSendNative == true) {

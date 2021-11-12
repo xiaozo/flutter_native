@@ -45,6 +45,50 @@ class ErrorMessage {
   }
 }
 
+class FJSLNetEncryptResult {
+  String? encrypt;
+  String? expand;
+  String? sign;
+
+  Object encode() {
+    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
+    pigeonMap['encrypt'] = encrypt;
+    pigeonMap['expand'] = expand;
+    pigeonMap['sign'] = sign;
+    return pigeonMap;
+  }
+
+  static FJSLNetEncryptResult decode(Object message) {
+    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+    return FJSLNetEncryptResult()
+      ..encrypt = pigeonMap['encrypt'] as String?
+      ..expand = pigeonMap['expand'] as String?
+      ..sign = pigeonMap['sign'] as String?;
+  }
+}
+
+class FJSLNetParams {
+  Map<Object?, Object?>? inputData;
+  Map<Object?, Object?>? expand;
+  String? function;
+
+  Object encode() {
+    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
+    pigeonMap['inputData'] = inputData;
+    pigeonMap['expand'] = expand;
+    pigeonMap['function'] = function;
+    return pigeonMap;
+  }
+
+  static FJSLNetParams decode(Object message) {
+    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+    return FJSLNetParams()
+      ..inputData = pigeonMap['inputData'] as Map<Object?, Object?>?
+      ..expand = pigeonMap['expand'] as Map<Object?, Object?>?
+      ..function = pigeonMap['function'] as String?;
+  }
+}
+
 class NetHostApi {
   Future<NetSecret> getSecret() async {
     const BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
@@ -113,6 +157,30 @@ class NetHostApi {
       );
     } else {
       // noop
+    }
+  }
+
+  Future<FJSLNetEncryptResult> jslParamsEncrypt(FJSLNetParams arg) async {
+    final Object encoded = arg.encode();
+    const BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.NetHostApi.jslParamsEncrypt', StandardMessageCodec());
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(encoded) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+        details: null,
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else {
+      return FJSLNetEncryptResult.decode(replyMap['result']!);
     }
   }
 }

@@ -61,8 +61,8 @@ name=${result}
 orginname=${name}
 name="${name}Channel"
 
-ochname="../zykjoeappstudentpad/ZykjOeAppStudentPad/Flutter/Channel/$name.h"
-ocmname="../zykjoeappstudentpad/ZykjOeAppStudentPad/Flutter/Channel/$name.m"
+ochname="../zykjappclient/ZykjAppClient/Flutter/Channel/$name.h"
+ocmname="../zykjappclient/ZykjAppClient/Flutter/Channel/$name.m"
 flutter pub run pigeon \
   --dart_null_safety \
   --input pigeons/$input.dart \
@@ -72,8 +72,8 @@ flutter pub run pigeon \
   --java_package "com.histudio.app.flutter"
 
 deledate="${name}Deledate"
-deledatePathh="../zykjoeappstudentpad/ZykjOeAppStudentPad/Flutter/ChannelDeledate/${deledate}.h"
-deledatePathm="../zykjoeappstudentpad/ZykjOeAppStudentPad/Flutter/ChannelDeledate/${deledate}.m"
+deledatePathh="../zykjappclient/ZykjAppClient/Flutter/ChannelDeledate/${deledate}.h"
+deledatePathm="../zykjappclient/ZykjAppClient/Flutter/ChannelDeledate/${deledate}.m"
 
 if [ ! -f ${deledatePathh} ]; then
  rm -f ${deledatePathh}
@@ -81,7 +81,7 @@ rm -f ${deledatePathm}
 deledatePathhc='
 //
 \n////  ChannelDeledate.h
-\n//  ZykjOeAppStudentPad
+\n//  zykjappclient
 \n//
 //  Created by DeerClass on 2021/4/20.
 \n//  Copyright © 2021 zykj. All rights reserved.
@@ -98,7 +98,7 @@ deledatePathhc='
 deledatePathmc='
 //
 \n////  ChannelDeledate.m
-\n//  ZykjOeAppStudentPad
+\n//  zykjappclient
 \n//
 //  Created by DeerClass on 2021/4/20.
 \n//  Copyright © 2021 zykj. All rights reserved.

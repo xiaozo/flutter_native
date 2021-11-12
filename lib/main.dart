@@ -11,11 +11,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'boost.dart';
 import 'channel/debug_channel.dart';
 import 'channel/debug_channel_dump.dart';
-import 'channel/net_channel_all.dart';
 import 'debug.dart';
 import 'get_it.dart';
 import 'global_context.dart';
-import 'net/net_config_repo.dart';
 import 'provider/rest_client.dart';
 import 'package:flutter_boost/boost_flutter_binding.dart';
 // @pragma('vm:entry-point')
