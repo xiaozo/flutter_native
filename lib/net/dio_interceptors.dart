@@ -158,12 +158,12 @@ class JslHttpInterceptor extends Interceptor {
 
 extension Configuartion on Dio {
   void build({bool signBody = true}) {
-    (this.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-        (HttpClient client) {
-      client.findProxy = (Uri url) {
-        return 'PROXY 193.168.70.107:8888';
-      };
-    };
+    // (this.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+    //     (HttpClient client) {
+    //   client.findProxy = (Uri url) {
+    //     return 'PROXY 193.168.70.107:8888';
+    //   };
+    // };
     interceptors.add(JslHttpInterceptor());
 
     if (kDebugMode) {
