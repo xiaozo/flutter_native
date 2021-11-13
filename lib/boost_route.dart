@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_boost/flutter_boost_app.dart';
 import 'package:flutter_boost/boost_navigator.dart';
-import 'package:flutter_deerclass/ui/appPages/test.dart';
+import 'appPages/Test.dart';
 import 'ui/screen.dart';
 
 RoutePageBuilder _wrapSize(RoutePageBuilder builder) {

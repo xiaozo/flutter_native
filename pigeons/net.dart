@@ -26,6 +26,7 @@ class FJSLNetEncryptResult {
 abstract class NetHostApi {
   NetSecret getSecret();
   void tokenExpire();
+  void stopUserApp();
   void studentInvalid(ErrorMessage message);
   FJSLNetEncryptResult jslParamsEncrypt(FJSLNetParams params);
 }

@@ -12,7 +12,9 @@ final restClientProvider =
 RestClient buildRestClient() {
   final dio = Dio();
   dio.build();
-  final baseUrl = getIt<NetConfigRepo>().mainUrl;
-  final client = RestClient(dio, baseUrl: baseUrl);
+  var baseUrl = getIt<NetConfigRepo>().mainUrl;
+  baseUrl = baseUrl.replaceAll(':/', '/');
+  final client =
+      RestClient(dio, baseUrl: "http://dev-ip.thedeer.cn:91/zykj-api/userapp/");
   return client;
 }

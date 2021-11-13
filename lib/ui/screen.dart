@@ -18,11 +18,11 @@ void dependScreenSize(BuildContext context) {
   if (width > 0 && height > 0) {
     ScreenUtil.init(
         BoxConstraints(
-            maxWidth: max(width, height), maxHeight: min(width, height)),
+            maxWidth: min(width, height), maxHeight: max(width, height)),
         designSize: const Size(375, 843),
         orientation: Orientation.landscape);
   } else {
     ScreenUtil.init(BoxConstraints(maxWidth: 375, maxHeight: 843),
-        designSize: const Size(1024, 768), orientation: Orientation.portrait);
+        designSize: const Size(375, 843), orientation: Orientation.portrait);
   }
 }

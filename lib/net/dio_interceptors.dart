@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
+import 'package:dio/adapter.dart';
 import 'package:flutter/foundation.dart';
 
 import '../channel/net_channel_all.dart';
@@ -112,7 +113,19 @@ class JslHttpInterceptor extends Interceptor {
   JslHttpInterceptor();
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+  Future<void> onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
+    FJSLNetParams params = FJSLNetParams();
+    params.function = options.path;
+    params.inputData = options.data as Map;
+    FJSLNetEncryptResult p = await NetHostApi().jslParamsEncrypt(params);
+    Map<String, dynamic> newdata = Map();
+    newdata["encrypt"] = p.encrypt;
+    newdata["expand"] = p.expand;
+    newdata["sign"] = p.sign;
+
+    options.data = newdata;
+    options.path = "";
     handler.next(options);
   }
 
@@ -126,6 +139,13 @@ class JslHttpInterceptor extends Interceptor {
         if (errorCode == 0) {
           handler.next(resp);
         } else {
+          if (errorCode == -20001) {
+            ////token过期
+            NetHostApi().tokenExpire();
+          } else if (errorCode == -20002) {
+            ///停止使用app
+            NetHostApi().stopUserApp();
+          }
           handler.reject(DioError(
               requestOptions: resp.requestOptions,
               error: AppServiceException(
@@ -138,7 +158,13 @@ class JslHttpInterceptor extends Interceptor {
 
 extension Configuartion on Dio {
   void build({bool signBody = true}) {
-    interceptors.add(DeerclassHttpInterceptor(signBody: signBody));
+    (this.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.findProxy = (Uri url) {
+        return 'PROXY 193.168.70.107:8888';
+      };
+    };
+    interceptors.add(JslHttpInterceptor());
 
     if (kDebugMode) {
       interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
@@ -159,5 +185,31 @@ extension AppHttpErrorHandle on Exception {
       return ((this as DioError).error as AppServiceException).code;
     }
     return -1;
+  }
+
+  int? errorCode() {
+    if (isAppServiceException()) {
+      return AppServiceExceptionCode();
+    } else if (this is DioError) {
+      final response = (this as DioError).response;
+      if (response != null) {
+        return response.statusCode;
+      }
+    }
+
+    return -1;
+  }
+
+  String? message() {
+    if (isAppServiceException()) {
+      return ((this as DioError).error as AppServiceException).message;
+    } else if (this is DioError) {
+      final response = (this as DioError).response;
+      if (response != null) {
+        return response.statusMessage;
+      }
+    }
+
+    return this.toString();
   }
 }
