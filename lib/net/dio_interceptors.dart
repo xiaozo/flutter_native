@@ -137,6 +137,7 @@ class JslHttpInterceptor extends Interceptor {
         final message = resp.data["message"]?.toString();
 
         if (errorCode == 0) {
+          resp.data = resp.data["data"];
           handler.next(resp);
         } else {
           if (errorCode == -20001) {

@@ -13,8 +13,10 @@ RestClient buildRestClient() {
   final dio = Dio();
   dio.build();
   var baseUrl = getIt<NetConfigRepo>().mainUrl;
-  baseUrl = baseUrl.replaceAll(':/', '/');
-  final client =
-      RestClient(dio, baseUrl: "http://dev-ip.thedeer.cn:91/zykj-api/userapp/");
+  try {
+    baseUrl = baseUrl.replaceFirst(RegExp(r':/'), '/', 8);
+  } catch (e) {}
+
+  final client = RestClient(dio, baseUrl: baseUrl);
   return client;
 }

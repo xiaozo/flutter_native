@@ -41,7 +41,8 @@ class _TestPageState extends State<TestPage> {
 
   @override
   void initState() {
-    p = UserOrderListParams(page_num: "1", page_size: "10", order_status: "0");
+    p = UserOrderListParams(
+        page_number: "1", page_size: "10", order_status: "0");
     super.initState();
   }
 

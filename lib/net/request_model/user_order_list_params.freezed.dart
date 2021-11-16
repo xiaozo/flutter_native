@@ -22,12 +22,12 @@ class _$UserOrderListParamsTearOff {
 
   _UserOrderListParams call(
       {String? order_status,
-      String? page_num,
-      String? page_size,
+      String? page_number,
+      String? page_size = "10",
       String? is_show_recharge_unpaid = "1"}) {
     return _UserOrderListParams(
       order_status: order_status,
-      page_num: page_num,
+      page_number: page_number,
       page_size: page_size,
       is_show_recharge_unpaid: is_show_recharge_unpaid,
     );
@@ -44,7 +44,7 @@ const $UserOrderListParams = _$UserOrderListParamsTearOff();
 /// @nodoc
 mixin _$UserOrderListParams {
   String? get order_status => throw _privateConstructorUsedError;
-  String? get page_num => throw _privateConstructorUsedError;
+  String? get page_number => throw _privateConstructorUsedError;
   String? get page_size => throw _privateConstructorUsedError;
   String? get is_show_recharge_unpaid => throw _privateConstructorUsedError;
 
@@ -61,7 +61,7 @@ abstract class $UserOrderListParamsCopyWith<$Res> {
       _$UserOrderListParamsCopyWithImpl<$Res>;
   $Res call(
       {String? order_status,
-      String? page_num,
+      String? page_number,
       String? page_size,
       String? is_show_recharge_unpaid});
 }
@@ -78,7 +78,7 @@ class _$UserOrderListParamsCopyWithImpl<$Res>
   @override
   $Res call({
     Object? order_status = freezed,
-    Object? page_num = freezed,
+    Object? page_number = freezed,
     Object? page_size = freezed,
     Object? is_show_recharge_unpaid = freezed,
   }) {
@@ -87,9 +87,9 @@ class _$UserOrderListParamsCopyWithImpl<$Res>
           ? _value.order_status
           : order_status // ignore: cast_nullable_to_non_nullable
               as String?,
-      page_num: page_num == freezed
-          ? _value.page_num
-          : page_num // ignore: cast_nullable_to_non_nullable
+      page_number: page_number == freezed
+          ? _value.page_number
+          : page_number // ignore: cast_nullable_to_non_nullable
               as String?,
       page_size: page_size == freezed
           ? _value.page_size
@@ -112,7 +112,7 @@ abstract class _$UserOrderListParamsCopyWith<$Res>
   @override
   $Res call(
       {String? order_status,
-      String? page_num,
+      String? page_number,
       String? page_size,
       String? is_show_recharge_unpaid});
 }
@@ -131,7 +131,7 @@ class __$UserOrderListParamsCopyWithImpl<$Res>
   @override
   $Res call({
     Object? order_status = freezed,
-    Object? page_num = freezed,
+    Object? page_number = freezed,
     Object? page_size = freezed,
     Object? is_show_recharge_unpaid = freezed,
   }) {
@@ -140,9 +140,9 @@ class __$UserOrderListParamsCopyWithImpl<$Res>
           ? _value.order_status
           : order_status // ignore: cast_nullable_to_non_nullable
               as String?,
-      page_num: page_num == freezed
-          ? _value.page_num
-          : page_num // ignore: cast_nullable_to_non_nullable
+      page_number: page_number == freezed
+          ? _value.page_number
+          : page_number // ignore: cast_nullable_to_non_nullable
               as String?,
       page_size: page_size == freezed
           ? _value.page_size
@@ -164,8 +164,8 @@ class _$_UserOrderListParams
     implements _UserOrderListParams {
   _$_UserOrderListParams(
       {this.order_status,
-      this.page_num,
-      this.page_size,
+      this.page_number,
+      this.page_size = "10",
       this.is_show_recharge_unpaid = "1"});
 
   factory _$_UserOrderListParams.fromJson(Map<String, dynamic> json) =>
@@ -174,7 +174,8 @@ class _$_UserOrderListParams
   @override
   final String? order_status;
   @override
-  final String? page_num;
+  final String? page_number;
+  @JsonKey(defaultValue: "10")
   @override
   final String? page_size;
   @JsonKey(defaultValue: "1")
@@ -183,7 +184,7 @@ class _$_UserOrderListParams
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UserOrderListParams(order_status: $order_status, page_num: $page_num, page_size: $page_size, is_show_recharge_unpaid: $is_show_recharge_unpaid)';
+    return 'UserOrderListParams(order_status: $order_status, page_number: $page_number, page_size: $page_size, is_show_recharge_unpaid: $is_show_recharge_unpaid)';
   }
 
   @override
@@ -192,7 +193,7 @@ class _$_UserOrderListParams
     properties
       ..add(DiagnosticsProperty('type', 'UserOrderListParams'))
       ..add(DiagnosticsProperty('order_status', order_status))
-      ..add(DiagnosticsProperty('page_num', page_num))
+      ..add(DiagnosticsProperty('page_number', page_number))
       ..add(DiagnosticsProperty('page_size', page_size))
       ..add(DiagnosticsProperty(
           'is_show_recharge_unpaid', is_show_recharge_unpaid));
@@ -205,9 +206,9 @@ class _$_UserOrderListParams
             (identical(other.order_status, order_status) ||
                 const DeepCollectionEquality()
                     .equals(other.order_status, order_status)) &&
-            (identical(other.page_num, page_num) ||
+            (identical(other.page_number, page_number) ||
                 const DeepCollectionEquality()
-                    .equals(other.page_num, page_num)) &&
+                    .equals(other.page_number, page_number)) &&
             (identical(other.page_size, page_size) ||
                 const DeepCollectionEquality()
                     .equals(other.page_size, page_size)) &&
@@ -221,7 +222,7 @@ class _$_UserOrderListParams
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(order_status) ^
-      const DeepCollectionEquality().hash(page_num) ^
+      const DeepCollectionEquality().hash(page_number) ^
       const DeepCollectionEquality().hash(page_size) ^
       const DeepCollectionEquality().hash(is_show_recharge_unpaid);
 
@@ -240,7 +241,7 @@ class _$_UserOrderListParams
 abstract class _UserOrderListParams implements UserOrderListParams {
   factory _UserOrderListParams(
       {String? order_status,
-      String? page_num,
+      String? page_number,
       String? page_size,
       String? is_show_recharge_unpaid}) = _$_UserOrderListParams;
 
@@ -250,7 +251,7 @@ abstract class _UserOrderListParams implements UserOrderListParams {
   @override
   String? get order_status => throw _privateConstructorUsedError;
   @override
-  String? get page_num => throw _privateConstructorUsedError;
+  String? get page_number => throw _privateConstructorUsedError;
   @override
   String? get page_size => throw _privateConstructorUsedError;
   @override

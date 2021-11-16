@@ -46,7 +46,7 @@ class TestViewModel extends StateNotifier<TestState> {
     try {
       List<UserAppOrder> list =
           await buildRestClient().getUserOrderList(params);
-      print(list);
+      state = state.copyWith(userAppOrders: list);
     } catch (e) {
       state = state.copyWith(
           pageState: PageState.errorState, error: e as Exception);

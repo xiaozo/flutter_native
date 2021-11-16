@@ -8,8 +8,8 @@ part 'user_order_list_params.g.dart';
 class UserOrderListParams with _$UserOrderListParams {
   factory UserOrderListParams({
     String? order_status,
-    String? page_num,
-    String? page_size,
+    String? page_number,
+    @Default("10") String? page_size,
     @Default("1") String? is_show_recharge_unpaid,
   }) = _UserOrderListParams;
 
