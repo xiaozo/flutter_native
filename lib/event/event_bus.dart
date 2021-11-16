@@ -1,5 +1,5 @@
 //订阅者回调签名
-import 'package:flutter_boost/boost_channel.dart';
+import 'package:flutter_boost/flutter_boost.dart';
 
 typedef void EventCallback(Map arg);
 

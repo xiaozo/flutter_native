@@ -17,7 +17,7 @@ import 'get_it.dart';
 import 'global_context.dart';
 import 'net/net_config_repo.dart';
 import 'provider/rest_client.dart';
-import 'package:flutter_boost/boost_flutter_binding.dart';
+import 'package:flutter_boost/flutter_boost.dart';
 // @pragma('vm:entry-point')
 
 class CustomFlutterBinding extends WidgetsFlutterBinding

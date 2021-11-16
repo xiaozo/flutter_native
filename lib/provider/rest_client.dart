@@ -13,9 +13,6 @@ RestClient buildRestClient() {
   final dio = Dio();
   dio.build();
   var baseUrl = getIt<NetConfigRepo>().mainUrl;
-  try {
-    baseUrl = baseUrl.replaceFirst(RegExp(r':/'), '/', 8);
-  } catch (e) {}
 
   final client = RestClient(dio, baseUrl: baseUrl);
   return client;

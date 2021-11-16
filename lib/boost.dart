@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_boost/flutter_boost_app.dart';
+import 'package:flutter_boost/flutter_boost.dart';
 import 'package:flutter_deerclass/channel/notification_info_channel.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 

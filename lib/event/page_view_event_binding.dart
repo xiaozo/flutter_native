@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_boost/page_visibility.dart';
+import 'package:flutter_boost/flutter_boost.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import '../utils/boost_context.dart';
 

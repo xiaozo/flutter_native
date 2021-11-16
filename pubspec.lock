@@ -248,8 +248,8 @@ packages:
     dependency: "direct dev"
     description:
       path: "."
-      ref: "v3.0-preview.5"
-      resolved-ref: d91f40aa94711e485cff5406390ac64b483807b6
+      ref: "v3.0-preview.16"
+      resolved-ref: bf12730c4108d23e03cb5bca38a34afaf61dc445
       url: "https://github.com/alibaba/flutter_boost.git"
     source: git
     version: "3.0.0"
@@ -347,6 +347,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.0"
+  gzx_dropdown_menu:
+    dependency: "direct main"
+    description:
+      name: gzx_dropdown_menu
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.1.0"
   hooks_riverpod:
     dependency: "direct main"
     description:

@@ -30,7 +30,7 @@ class TestState {
   }
 }
 
-class TestViewModel extends StateNotifier<TestState> {
+class TestViewModel extends StateNotifier<TestState> with LoadingViewMix {
   final UserOrderListParams params;
 
   TestViewModel(this.params, [TestState? state])
@@ -42,12 +42,18 @@ class TestViewModel extends StateNotifier<TestState> {
     if (state.pageState == PageState.initializedState) {
       state = state.copyWith(pageState: PageState.busyState);
     }
+    showLoading();
 
     try {
       List<UserAppOrder> list =
           await buildRestClient().getUserOrderList(params);
-      state = state.copyWith(userAppOrders: list);
+      state = state.copyWith(
+        userAppOrders: list,
+        pageState: PageState.dataFetchState,
+      );
+      hiddenLoading();
     } catch (e) {
+      hiddenLoading();
       state = state.copyWith(
           pageState: PageState.errorState, error: e as Exception);
     }
