@@ -281,6 +281,11 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.16.0"
+  flutter_localizations:
+    dependency: "direct main"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   flutter_riverpod:
     dependency: transitive
     description:
@@ -389,6 +394,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.0.2"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.17.0"
   io:
     dependency: transitive
     description:
@@ -606,6 +618,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.0"
+  pull_to_refresh:
+    dependency: "direct main"
+    description:
+      name: pull_to_refresh
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.0"
   quiver:
     dependency: transitive
     description:

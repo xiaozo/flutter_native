@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'boost.dart';
 import 'channel/debug_channel.dart';
@@ -18,6 +19,8 @@ import 'global_context.dart';
 import 'net/net_config_repo.dart';
 import 'provider/rest_client.dart';
 import 'package:flutter_boost/flutter_boost.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 // @pragma('vm:entry-point')
 
 class CustomFlutterBinding extends WidgetsFlutterBinding
@@ -59,10 +62,21 @@ Future<void> runBoostApp() async {
       child: BoostApp(
         appBuilder: (home) {
           return MaterialApp(
+            localizationsDelegates: [
+              RefreshLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [
+              const Locale('zh'),
+              const Locale('en'),
+            ],
             navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,
             title: '鹿优课',
             theme: new ThemeData(
+              primaryColor: Color.fromRGBO(255, 139, 73, 1),
               appBarTheme: AppBarTheme(color: Color.fromRGBO(251, 251, 251, 1)),
               scaffoldBackgroundColor: const Color.fromRGBO(240, 240, 240, 1),
             ),

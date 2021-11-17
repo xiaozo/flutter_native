@@ -7,6 +7,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'app_loading_view.dart';
 import 'package:flutter_deerclass/deer_class.dart';
 
+typedef RefreshBuilder = Widget Function(BuildContext context, Widget child);
+
 class CommonBasePage extends StatelessWidget {
   final Widget child;
   final AutoDisposeStateNotifierProvider<LoadingViewModel, LoadingState>?
@@ -24,6 +26,26 @@ class CommonBasePage extends StatelessWidget {
     this.loadingStateNotifierProvider,
     this.error,
   }) : super(key: key);
+
+  Widget loadWidget() {
+    return Container(
+      color: Colors.transparent,
+      child: Align(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            width: 100,
+            height: 100,
+            color: Colors.black54,
+            child: CupertinoActivityIndicator(
+              animating: true,
+              radius: 20,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,23 +66,61 @@ class CommonBasePage extends StatelessWidget {
       widgets.add(Consumer(builder: (context, watch, _) {
         LoadingState state = watch(loadingStateNotifierProvider!);
         return state.isLoading
-            ? Container(
-                color: Colors.transparent,
-                child: Align(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      color: Colors.black54,
-                      child: CupertinoActivityIndicator(
-                        animating: true,
-                        radius: 20,
-                      ),
-                    ),
-                  ),
-                ),
-              )
+            ? loadWidget()
+            : Container(
+                width: 0,
+                height: 0,
+              );
+      }));
+    }
+    return ConstrainedBox(
+      constraints: BoxConstraints.expand(),
+      child: Stack(
+        children: widgets,
+      ),
+    );
+  }
+}
+
+class RefreshBasePage extends CommonBasePage {
+  final RefreshBuilder refreshBuilder;
+
+  RefreshBasePage(
+      {required this.refreshBuilder,
+      Key? key,
+      required Widget child,
+      required PageState pageState,
+      VoidCallback? buttonActionCallback,
+      Exception? error})
+      : super(
+            key: key,
+            child: child,
+            pageState: pageState,
+            buttonActionCallback: buttonActionCallback,
+            error: error);
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> widgets = [];
+    Widget childWidget = Container();
+
+    if (pageState == PageState.busyState ||
+        pageState == PageState.initializedState) {
+    } else if (pageState == PageState.emptyDataState ||
+        pageState == PageState.errorState) {
+      childWidget = NetErrorWidget(
+          callback: buttonActionCallback, message: error?.message());
+    } else {
+      childWidget = child;
+    }
+
+    widgets.add(refreshBuilder(context, childWidget));
+
+    if (loadingStateNotifierProvider != null) {
+      widgets.add(Consumer(builder: (context, watch, _) {
+        LoadingState state = watch(loadingStateNotifierProvider!);
+        return state.isLoading
+            ? loadWidget()
             : Container(
                 width: 0,
                 height: 0,

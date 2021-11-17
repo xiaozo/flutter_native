@@ -1,4 +1,5 @@
 import 'package:flutter_deerclass/channel/net_channel_all.dart';
+import 'package:flutter_deerclass/net/dio_interceptors.dart';
 import 'package:flutter_deerclass/net/model/user_app_order.dart';
 import 'package:flutter_deerclass/net/request_model/user_order_list_params.dart';
 import 'package:flutter_deerclass/net/rest_api.dart';
@@ -31,29 +32,26 @@ class TestState {
 }
 
 class TestViewModel extends StateNotifier<TestState> with LoadingViewMix {
-  final UserOrderListParams params;
+  final TTuple<UserOrderListParams> params;
 
   TestViewModel(this.params, [TestState? state])
       : super(state ?? TestState.initial()) {
-    getUserOrderList();
+    // getUserOrderList();
   }
 
   Future<void> getUserOrderList() async {
     if (state.pageState == PageState.initializedState) {
       state = state.copyWith(pageState: PageState.busyState);
     }
-    showLoading();
 
     try {
       List<UserAppOrder> list =
-          await buildRestClient().getUserOrderList(params);
+          await buildRestClient().getUserOrderList(params.item);
       state = state.copyWith(
         userAppOrders: list,
         pageState: PageState.dataFetchState,
       );
-      hiddenLoading();
     } catch (e) {
-      hiddenLoading();
       state = state.copyWith(
           pageState: PageState.errorState, error: e as Exception);
     }

@@ -16,6 +16,21 @@ import 'rest_api.dart';
 final _signKey = utf8.encode("piw38kulfozrea7ydmjnvbc965q1gt2x");
 const _signHeader = "sign";
 
+///请求包裹参数
+class TTuple<T> {
+  late T item;
+
+  TTuple(this.item);
+}
+
+///请求包裹参数
+class TTuple2<T1, T2> {
+  late T1 item1;
+  late T2 item2;
+
+  TTuple2(this.item1, this.item2);
+}
+
 String _buildSignSource(
     String method, String url, String ts, String body, String apiToken) {
   String message = "$method\n$url\n$ts\n$body";
