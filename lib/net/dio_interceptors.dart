@@ -16,6 +16,10 @@ import 'rest_api.dart';
 final _signKey = utf8.encode("piw38kulfozrea7ydmjnvbc965q1gt2x");
 const _signHeader = "sign";
 
+///request_code
+final kNoMoreHeaderCode = 20001;
+final knoMoreFootCode = 20002;
+
 ///请求包裹参数
 class TTuple<T> {
   late T item;

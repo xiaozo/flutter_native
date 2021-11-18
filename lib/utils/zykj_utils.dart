@@ -26,4 +26,10 @@ extension ConverTimeSting on int {
   }
 }
 
+extension ToolConverForSting on String {
+  String pageNumIncreaseStr() {
+    return (int.parse(this) + 1).toString();
+  }
+}
+
 class ZykjUtils {}

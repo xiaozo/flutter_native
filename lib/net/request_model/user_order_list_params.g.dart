@@ -10,7 +10,7 @@ _$_UserOrderListParams _$_$_UserOrderListParamsFromJson(
     Map<String, dynamic> json) {
   return _$_UserOrderListParams(
     order_status: json['order_status'] as String?,
-    page_number: json['page_number'] as String?,
+    page_number: json['page_number'] as String? ?? '1',
     page_size: json['page_size'] as String? ?? '10',
     is_show_recharge_unpaid: json['is_show_recharge_unpaid'] as String? ?? '1',
   );

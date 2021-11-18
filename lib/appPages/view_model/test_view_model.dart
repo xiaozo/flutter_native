@@ -47,13 +47,21 @@ class TestViewModel extends StateNotifier<TestState> with LoadingViewMix {
     try {
       List<UserAppOrder> list =
           await buildRestClient().getUserOrderList(params.item);
+
+      List<UserAppOrder> oldList =
+          params.item.page_number == "1" ? [] : state.userAppOrders;
+
+      oldList.addAll(list);
+
       state = state.copyWith(
-        userAppOrders: list,
-        pageState: PageState.dataFetchState,
-      );
-    } catch (e) {
-      state = state.copyWith(
-          pageState: PageState.errorState, error: e as Exception);
+          pageState: PageState.dataFetchState, userAppOrders: oldList);
+    } on Exception catch (e) {
+      if (e.AppServiceExceptionCode() == knoMoreFootCode) {
+        state =
+            state.copyWith(pageState: PageState.noMoreDataState, error: null);
+      } else {
+        state = state.copyWith(pageState: PageState.errorState, error: e);
+      }
     }
   }
 }

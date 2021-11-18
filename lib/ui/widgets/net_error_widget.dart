@@ -19,7 +19,11 @@ class NetErrorWidget extends StatelessWidget {
               height: 331.as),
           Container(
             margin: EdgeInsets.only(top: 0.as),
-            child: Text("${message ?? "暂无数据"}"),
+            child: Text(
+              "${message ?? "暂无数据"}",
+              style: TextStyle(
+                  fontSize: 14.sph, color: Color.fromRGBO(178, 178, 178, 1)),
+            ),
           )
         ],
       ),

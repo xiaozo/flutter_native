@@ -7,10 +7,9 @@ part 'user_object_order.g.dart';
 @freezed
 class UserObjectOrder with _$UserObjectOrder {
   factory UserObjectOrder({
-    String? total_pay,
-    String? pay_countdown,
-    String? student_good_id,
-    String? discount_coupon_record_balance,
+    String? object_name,
+    String? object_subtitle,
+    String? fee,
   }) = _UserObjectOrder;
 
   factory UserObjectOrder.fromJson(Map<String, dynamic> json) =>

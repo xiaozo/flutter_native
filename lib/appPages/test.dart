@@ -1,10 +1,15 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_deerclass/net/request_model/page.dart';
 import 'package:flutter_deerclass/net/request_model/user_order_list_params.dart';
 import 'package:flutter_deerclass/ui/widgets/appbar_gradient.dart';
 import 'package:flutter_deerclass/ui/widgets/back_buttonv2.dart';
 import 'package:flutter_deerclass/ui/widgets/common_base_page.dart';
+import 'package:flutter_deerclass/ui/widgets/gradient_button.dart';
 import 'package:flutter_deerclass/ui/widgets/my_app_bar.dart';
+import 'package:flutter_deerclass/ui/widgets/page_state.dart';
 import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -12,6 +17,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'view_model/test_view_model.dart';
 import 'package:flutter_deerclass/deer_class.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:flutter_deerclass/pro_global.dart';
 
 final orderlistProvider = StateNotifierProvider.autoDispose
     .family<TestViewModel, TestState, TTuple<UserOrderListParams>>(
@@ -52,7 +58,7 @@ class _TestPageState extends State<TestPage> {
   late SortCondition _currentSortCondition;
   List<SortCondition> _typeConditions = [];
 
-  late RefreshController _refreshController;
+  late RefreshBasePageController _refreshController;
 
   @override
   void initState() {
@@ -66,7 +72,8 @@ class _TestPageState extends State<TestPage> {
 
     _currentSortCondition = _typeConditions.first;
 
-    _refreshController = RefreshController(initialRefresh: true);
+    _refreshController = RefreshBasePageController(
+        refreshController: RefreshController(initialRefresh: true), pageNum: 1);
 
     p = TTuple<UserOrderListParams>(UserOrderListParams(
         page_number: "1",
@@ -74,6 +81,12 @@ class _TestPageState extends State<TestPage> {
         order_status: _currentSortCondition.keys));
 
     super.initState();
+
+    // WidgetsBinding.instance!.addPostFrameCallback((_) {
+    //   Future.delayed(const Duration(milliseconds: 500)).then((val) {
+    //     _refreshController.requestRefresh();
+    //   });
+    // });
   }
 
   @override
@@ -173,23 +186,23 @@ class _TestPageState extends State<TestPage> {
                 Expanded(
                     child: RefreshBasePage(
                   pageState: categories.pageState,
-                  refreshBuilder: (BuildContext context, Widget child) {
-                    return SmartRefresher(
-                      enablePullUp: true,
-                      enablePullDown: true,
-                      controller: _refreshController,
-                      child: child,
-                      onRefresh: () async {
-                        print("onRefresh");
-                        await context
-                            .read(orderlistProvider(p).notifier)
-                            .getUserOrderList();
-                        _refreshController.refreshCompleted();
-                      },
-                      onLoading: () {
-                        print("object");
-                      },
-                    );
+                  onLoading: (RefreshHandle handle) async {
+                    await context
+                        .read(orderlistProvider(p).notifier)
+                        .getUserOrderList();
+                    final categories = context.read(orderlistProvider(p));
+                    handle(categories.pageState);
+                  },
+                  onRefresh: (RefreshHandle handle) async {
+                    await context
+                        .read(orderlistProvider(p).notifier)
+                        .getUserOrderList();
+                    final categories = context.read(orderlistProvider(p));
+                    handle(categories.pageState);
+                  },
+                  controller: _refreshController,
+                  refreshChanglePageNum: (String pageNum) {
+                    p.item = p.item.copyWith(page_number: pageNum);
                   },
                   child: ListView.separated(
                     shrinkWrap: true,
@@ -197,13 +210,157 @@ class _TestPageState extends State<TestPage> {
                     itemCount: categories.userAppOrders.length,
                     // item 的个数
                     separatorBuilder: (BuildContext context, int index) =>
-                        Divider(height: 1.0),
+                        Divider(
+                      height: 0,
+                      color: Colors.transparent,
+                    ),
                     // 添加分割线
                     itemBuilder: (BuildContext context, int index) {
                       final model = categories.userAppOrders[index];
+                      final userObjectOrder = model.object_data!.first;
                       return Container(
-                        height: 100,
-                        child: Text("ccc:${model.total_pay}"),
+                        padding: EdgeInsets.fromLTRB(
+                            kViewMargin, 10.0.as, kViewMargin, 10.0.as),
+                        child: Column(
+                          children: [
+                            Text(
+                              '${model.order_date_name}',
+                              style: TextStyle(
+                                  fontSize: 12.0.sph, color: Color(0xFF9b9b9b)),
+                            ),
+                            Stack(
+                              fit: StackFit.loose,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(top: 8.as),
+                                  width: double.infinity,
+                                  decoration: new BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10.0)),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey,
+                                        offset: Offset(-1.0, 2.0), //阴影y轴偏移量
+                                        blurRadius: 3.0, //阴影模糊程度
+                                      )
+                                    ],
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(
+                                        kViewMargin, 18.as, kViewMargin, 8.as),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${userObjectOrder.object_name}',
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontSize: 18.sph,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 8.as,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                                child: Text(
+                                              '${userObjectOrder.object_subtitle}',
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 13.sph,
+                                                  color: kGrayDarkColor),
+                                            )),
+                                            Text('￥${userObjectOrder.fee}')
+                                          ],
+                                        ),
+                                        model.order_status! ==
+                                                OrderStatus_finish
+                                            ? Column(
+                                                children: [
+                                                  SizedBox(
+                                                    height: 8.as,
+                                                  ),
+                                                  Container(
+                                                    color: kLineColor,
+                                                    width: double.infinity,
+                                                    height: 0.5.as,
+                                                  ),
+                                                  SizedBox(
+                                                    height: 8.as,
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                    children: [
+                                                      Text(
+                                                        "实付金额",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w300,
+                                                            fontSize: 12.as,
+                                                            color:
+                                                                kGrayDarkColor),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 5.as,
+                                                      ),
+                                                      Text(
+                                                          '￥${userObjectOrder.fee}',
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w300,
+                                                            fontSize: 14.as,
+                                                          )),
+                                                    ],
+                                                  )
+                                                ],
+                                              )
+                                            : model.order_status ==
+                                                    OrderStatus_wait
+                                                ? Column(
+                                                    children: [
+                                                      SizedBox(
+                                                        height: 8.as,
+                                                      ),
+                                                      Container(
+                                                        color: kLineColor,
+                                                        width: double.infinity,
+                                                        height: 0.5.as,
+                                                      ),
+                                                      SizedBox(
+                                                        height: 8.as,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                          GradientButton(
+                                                            child: Text('ccc'),
+                                                          )
+                                                        ],
+                                                      )
+                                                    ],
+                                                  )
+                                                : Container()
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                    top: 5.as,
+                                    right: 0,
+                                    child: _statusWidget(
+                                        context, model.order_status!)),
+                              ],
+                            )
+                          ],
+                        ),
                       );
                     },
                   ),
@@ -223,7 +380,7 @@ class _TestPageState extends State<TestPage> {
                         p.item = p.item
                             .copyWith(order_status: _currentSortCondition.keys);
 
-                        _refreshController.requestRefresh();
+                        _refreshController.refreshController.requestRefresh();
                       });
                     })),
               ],
@@ -231,4 +388,33 @@ class _TestPageState extends State<TestPage> {
           ]);
         }));
   }
+
+  Widget _statusWidget(BuildContext context, int order_status) {
+    String title = "";
+    Color color = Color(0xFFDCDCDC);
+
+    if (order_status == OrderStatus_wait) {
+      title = "待支付";
+      color = Theme.of(context).primaryColor;
+    } else if (order_status == OrderStatus_finish) {
+      title = "已完成";
+    } else if (order_status == OrderStatus_cancel) {
+      title = "已取消";
+    }
+    return Container(
+        padding: EdgeInsets.symmetric(horizontal: 8.0.as, vertical: 2.as),
+        child: Text(
+          '${title}',
+          style: TextStyle(color: Colors.white, fontSize: 11.as),
+        ),
+        decoration: new BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(10.0),
+                bottomLeft: Radius.circular(10.0))));
+  }
+
+  // Widget _bottomWidget(BuildContext context,) {
+
+  // }
 }

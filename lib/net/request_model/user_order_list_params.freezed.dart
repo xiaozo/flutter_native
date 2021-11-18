@@ -22,8 +22,8 @@ class _$UserOrderListParamsTearOff {
 
   _UserOrderListParams call(
       {String? order_status,
-      String? page_number,
-      String? page_size = "10",
+      String page_number = "1",
+      String page_size = "10",
       String? is_show_recharge_unpaid = "1"}) {
     return _UserOrderListParams(
       order_status: order_status,
@@ -44,8 +44,8 @@ const $UserOrderListParams = _$UserOrderListParamsTearOff();
 /// @nodoc
 mixin _$UserOrderListParams {
   String? get order_status => throw _privateConstructorUsedError;
-  String? get page_number => throw _privateConstructorUsedError;
-  String? get page_size => throw _privateConstructorUsedError;
+  String get page_number => throw _privateConstructorUsedError;
+  String get page_size => throw _privateConstructorUsedError;
   String? get is_show_recharge_unpaid => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -61,8 +61,8 @@ abstract class $UserOrderListParamsCopyWith<$Res> {
       _$UserOrderListParamsCopyWithImpl<$Res>;
   $Res call(
       {String? order_status,
-      String? page_number,
-      String? page_size,
+      String page_number,
+      String page_size,
       String? is_show_recharge_unpaid});
 }
 
@@ -90,11 +90,11 @@ class _$UserOrderListParamsCopyWithImpl<$Res>
       page_number: page_number == freezed
           ? _value.page_number
           : page_number // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       page_size: page_size == freezed
           ? _value.page_size
           : page_size // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       is_show_recharge_unpaid: is_show_recharge_unpaid == freezed
           ? _value.is_show_recharge_unpaid
           : is_show_recharge_unpaid // ignore: cast_nullable_to_non_nullable
@@ -112,8 +112,8 @@ abstract class _$UserOrderListParamsCopyWith<$Res>
   @override
   $Res call(
       {String? order_status,
-      String? page_number,
-      String? page_size,
+      String page_number,
+      String page_size,
       String? is_show_recharge_unpaid});
 }
 
@@ -143,11 +143,11 @@ class __$UserOrderListParamsCopyWithImpl<$Res>
       page_number: page_number == freezed
           ? _value.page_number
           : page_number // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       page_size: page_size == freezed
           ? _value.page_size
           : page_size // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       is_show_recharge_unpaid: is_show_recharge_unpaid == freezed
           ? _value.is_show_recharge_unpaid
           : is_show_recharge_unpaid // ignore: cast_nullable_to_non_nullable
@@ -157,14 +157,15 @@ class __$UserOrderListParamsCopyWithImpl<$Res>
 }
 
 @JsonSerializable()
+@With(PageParams)
 
 /// @nodoc
 class _$_UserOrderListParams
-    with DiagnosticableTreeMixin
+    with DiagnosticableTreeMixin, PageParams
     implements _UserOrderListParams {
   _$_UserOrderListParams(
       {this.order_status,
-      this.page_number,
+      this.page_number = "1",
       this.page_size = "10",
       this.is_show_recharge_unpaid = "1"});
 
@@ -173,11 +174,12 @@ class _$_UserOrderListParams
 
   @override
   final String? order_status;
+  @JsonKey(defaultValue: "1")
   @override
-  final String? page_number;
+  final String page_number;
   @JsonKey(defaultValue: "10")
   @override
-  final String? page_size;
+  final String page_size;
   @JsonKey(defaultValue: "1")
   @override
   final String? is_show_recharge_unpaid;
@@ -238,11 +240,11 @@ class _$_UserOrderListParams
   }
 }
 
-abstract class _UserOrderListParams implements UserOrderListParams {
+abstract class _UserOrderListParams implements UserOrderListParams, PageParams {
   factory _UserOrderListParams(
       {String? order_status,
-      String? page_number,
-      String? page_size,
+      String page_number,
+      String page_size,
       String? is_show_recharge_unpaid}) = _$_UserOrderListParams;
 
   factory _UserOrderListParams.fromJson(Map<String, dynamic> json) =
@@ -251,9 +253,9 @@ abstract class _UserOrderListParams implements UserOrderListParams {
   @override
   String? get order_status => throw _privateConstructorUsedError;
   @override
-  String? get page_number => throw _privateConstructorUsedError;
+  String get page_number => throw _privateConstructorUsedError;
   @override
-  String? get page_size => throw _privateConstructorUsedError;
+  String get page_size => throw _privateConstructorUsedError;
   @override
   String? get is_show_recharge_unpaid => throw _privateConstructorUsedError;
   @override
