@@ -169,7 +169,7 @@ class RefreshBasePage extends CommonBasePage {
       controller: refreshController,
       child: childWidget,
       onRefresh: () async {
-        print("onRefresh");
+        debugPrint("onRefresh");
         refreshController.resetNoData();
 
         changePageNum(1);
@@ -187,7 +187,7 @@ class RefreshBasePage extends CommonBasePage {
         }
       },
       onLoading: () async {
-        print("onLoading");
+        debugPrint("onLoading");
         if (onLoading != null) {
           onLoading!((PageState pageState) {
             if (pageState == PageState.errorState ||

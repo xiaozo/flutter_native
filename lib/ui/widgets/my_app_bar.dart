@@ -31,6 +31,7 @@ class MyAppNavTitle extends StatelessWidget {
       title,
       style: TextStyle(
         fontSize: 18.as,
+        fontWeight: FontWeight.w400,
         color: color ?? Colors.black,
       ),
     );

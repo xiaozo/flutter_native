@@ -23,7 +23,7 @@ final orderlistProvider = StateNotifierProvider.autoDispose
     .family<TestViewModel, TestState, TTuple<UserOrderListParams>>(
         (ref, params) {
   ref.onDispose(() {
-    print("orderlistProvider-onDispose");
+    debugPrint("orderlistProvider-onDispose");
   });
   return TestViewModel(params);
 });
@@ -198,7 +198,9 @@ class _TestPageState extends State<TestPage> {
                         .read(orderlistProvider(p).notifier)
                         .getUserOrderList();
                     final categories = context.read(orderlistProvider(p));
-                    handle(categories.pageState);
+                    handle(
+                      categories.pageState,
+                    );
                   },
                   controller: _refreshController,
                   refreshChanglePageNum: (String pageNum) {
@@ -218,148 +220,163 @@ class _TestPageState extends State<TestPage> {
                     itemBuilder: (BuildContext context, int index) {
                       final model = categories.userAppOrders[index];
                       final userObjectOrder = model.object_data!.first;
-                      return Container(
-                        padding: EdgeInsets.fromLTRB(
-                            kViewMargin, 10.0.as, kViewMargin, 10.0.as),
-                        child: Column(
-                          children: [
-                            Text(
-                              '${model.order_date_name}',
-                              style: TextStyle(
-                                  fontSize: 12.0.sph, color: Color(0xFF9b9b9b)),
-                            ),
-                            Stack(
-                              fit: StackFit.loose,
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(top: 8.as),
-                                  width: double.infinity,
-                                  decoration: new BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10.0)),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey,
-                                        offset: Offset(-1.0, 2.0), //阴影y轴偏移量
-                                        blurRadius: 3.0, //阴影模糊程度
-                                      )
-                                    ],
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.fromLTRB(
-                                        kViewMargin, 18.as, kViewMargin, 8.as),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '${userObjectOrder.object_name}',
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontSize: 18.sph,
-                                            fontWeight: FontWeight.w500,
+                      return GestureDetector(
+                        onTap: () {
+                          print("order_id:" + model.order_id.toString());
+                        },
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(
+                              kViewMargin, 10.0.as, kViewMargin, 10.0.as),
+                          child: Column(
+                            children: [
+                              Text(
+                                '${model.order_date_name}',
+                                style: TextStyle(
+                                    fontSize: 12.0.sph,
+                                    color: Color(0xFF9b9b9b)),
+                              ),
+                              Stack(
+                                fit: StackFit.loose,
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(top: 8.as),
+                                    width: double.infinity,
+                                    decoration: new BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10.0)),
+                                      boxShadow: [AppBoxShadow()],
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.fromLTRB(kViewMargin,
+                                          18.as, kViewMargin, 8.as),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '${userObjectOrder.object_name}',
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: 18.sph,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(
-                                          height: 8.as,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                                child: Text(
-                                              '${userObjectOrder.object_subtitle}',
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  fontSize: 13.sph,
-                                                  color: kGrayDarkColor),
-                                            )),
-                                            Text('￥${userObjectOrder.fee}')
-                                          ],
-                                        ),
-                                        model.order_status! ==
-                                                OrderStatus_finish
-                                            ? Column(
-                                                children: [
-                                                  SizedBox(
-                                                    height: 8.as,
-                                                  ),
-                                                  Container(
-                                                    color: kLineColor,
-                                                    width: double.infinity,
-                                                    height: 0.5.as,
-                                                  ),
-                                                  SizedBox(
-                                                    height: 8.as,
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
-                                                    children: [
-                                                      Text(
-                                                        "实付金额",
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w300,
-                                                            fontSize: 12.as,
-                                                            color:
-                                                                kGrayDarkColor),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 5.as,
-                                                      ),
-                                                      Text(
-                                                          '￥${userObjectOrder.fee}',
+                                          SizedBox(
+                                            height: 8.as,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                  child: Text(
+                                                '${userObjectOrder.object_subtitle}',
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    fontSize: 13.sph,
+                                                    color: kGrayDarkColor),
+                                              )),
+                                              Text('￥${userObjectOrder.fee}')
+                                            ],
+                                          ),
+                                          model.order_status! ==
+                                                  OrderStatus_finish
+                                              ? Column(
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 8.as,
+                                                    ),
+                                                    Container(
+                                                      color: kLineColor,
+                                                      width: double.infinity,
+                                                      height: 0.5.as,
+                                                    ),
+                                                    SizedBox(
+                                                      height: 8.as,
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      children: [
+                                                        Text(
+                                                          "实付金额",
                                                           style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w300,
-                                                            fontSize: 14.as,
-                                                          )),
-                                                    ],
-                                                  )
-                                                ],
-                                              )
-                                            : model.order_status ==
-                                                    OrderStatus_wait
-                                                ? Column(
-                                                    children: [
-                                                      SizedBox(
-                                                        height: 8.as,
-                                                      ),
-                                                      Container(
-                                                        color: kLineColor,
-                                                        width: double.infinity,
-                                                        height: 0.5.as,
-                                                      ),
-                                                      SizedBox(
-                                                        height: 8.as,
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .end,
-                                                        children: [
-                                                          GradientButton(
-                                                            child: Text('ccc'),
-                                                          )
-                                                        ],
-                                                      )
-                                                    ],
-                                                  )
-                                                : Container()
-                                      ],
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w300,
+                                                              fontSize: 12.as,
+                                                              color:
+                                                                  kGrayDarkColor),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 5.as,
+                                                        ),
+                                                        Text(
+                                                            '￥${userObjectOrder.fee}',
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w300,
+                                                              fontSize: 14.as,
+                                                            )),
+                                                      ],
+                                                    )
+                                                  ],
+                                                )
+                                              : model.order_status ==
+                                                      OrderStatus_wait
+                                                  ? Column(
+                                                      children: [
+                                                        SizedBox(
+                                                          height: 8.as,
+                                                        ),
+                                                        Container(
+                                                          color: kLineColor,
+                                                          width:
+                                                              double.infinity,
+                                                          height: 0.5.as,
+                                                        ),
+                                                        SizedBox(
+                                                          height: 8.as,
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            GradientButton(
+                                                              colors: [
+                                                                kGradientMainBColor,
+                                                                kgradientMainEColor
+                                                              ],
+                                                              onPressed: () {},
+                                                              width: 78.as,
+                                                              height: 25.as,
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          12.0.as)),
+                                                              child:
+                                                                  Text('立即付款'),
+                                                            )
+                                                          ],
+                                                        )
+                                                      ],
+                                                    )
+                                                  : Container()
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Positioned(
-                                    top: 5.as,
-                                    right: 0,
-                                    child: _statusWidget(
-                                        context, model.order_status!)),
-                              ],
-                            )
-                          ],
+                                  Positioned(
+                                      top: 5.as,
+                                      right: 0,
+                                      child: _statusWidget(
+                                          context, model.order_status!)),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                       );
                     },

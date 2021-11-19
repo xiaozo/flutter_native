@@ -12,6 +12,7 @@ part 'user_app_order.g.dart';
 @freezed
 class UserAppOrder with _$UserAppOrder {
   factory UserAppOrder({
+    String? order_id,
     String? total_pay,
     String? order_date_name,
     String? pay_countdown,

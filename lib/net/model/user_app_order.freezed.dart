@@ -21,13 +21,15 @@ class _$UserAppOrderTearOff {
   const _$UserAppOrderTearOff();
 
   _UserAppOrder call(
-      {String? total_pay,
+      {String? order_id,
+      String? total_pay,
       String? order_date_name,
       String? pay_countdown,
       List<UserObjectOrder>? object_data,
       String? discount_coupon_record_balance,
       @JsonKey(fromJson: anyToInt) int? order_status}) {
     return _UserAppOrder(
+      order_id: order_id,
       total_pay: total_pay,
       order_date_name: order_date_name,
       pay_countdown: pay_countdown,
@@ -47,6 +49,7 @@ const $UserAppOrder = _$UserAppOrderTearOff();
 
 /// @nodoc
 mixin _$UserAppOrder {
+  String? get order_id => throw _privateConstructorUsedError;
   String? get total_pay => throw _privateConstructorUsedError;
   String? get order_date_name => throw _privateConstructorUsedError;
   String? get pay_countdown => throw _privateConstructorUsedError;
@@ -68,7 +71,8 @@ abstract class $UserAppOrderCopyWith<$Res> {
           UserAppOrder value, $Res Function(UserAppOrder) then) =
       _$UserAppOrderCopyWithImpl<$Res>;
   $Res call(
-      {String? total_pay,
+      {String? order_id,
+      String? total_pay,
       String? order_date_name,
       String? pay_countdown,
       List<UserObjectOrder>? object_data,
@@ -86,6 +90,7 @@ class _$UserAppOrderCopyWithImpl<$Res> implements $UserAppOrderCopyWith<$Res> {
 
   @override
   $Res call({
+    Object? order_id = freezed,
     Object? total_pay = freezed,
     Object? order_date_name = freezed,
     Object? pay_countdown = freezed,
@@ -94,6 +99,10 @@ class _$UserAppOrderCopyWithImpl<$Res> implements $UserAppOrderCopyWith<$Res> {
     Object? order_status = freezed,
   }) {
     return _then(_value.copyWith(
+      order_id: order_id == freezed
+          ? _value.order_id
+          : order_id // ignore: cast_nullable_to_non_nullable
+              as String?,
       total_pay: total_pay == freezed
           ? _value.total_pay
           : total_pay // ignore: cast_nullable_to_non_nullable
@@ -130,7 +139,8 @@ abstract class _$UserAppOrderCopyWith<$Res>
       __$UserAppOrderCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String? total_pay,
+      {String? order_id,
+      String? total_pay,
       String? order_date_name,
       String? pay_countdown,
       List<UserObjectOrder>? object_data,
@@ -150,6 +160,7 @@ class __$UserAppOrderCopyWithImpl<$Res> extends _$UserAppOrderCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? order_id = freezed,
     Object? total_pay = freezed,
     Object? order_date_name = freezed,
     Object? pay_countdown = freezed,
@@ -158,6 +169,10 @@ class __$UserAppOrderCopyWithImpl<$Res> extends _$UserAppOrderCopyWithImpl<$Res>
     Object? order_status = freezed,
   }) {
     return _then(_UserAppOrder(
+      order_id: order_id == freezed
+          ? _value.order_id
+          : order_id // ignore: cast_nullable_to_non_nullable
+              as String?,
       total_pay: total_pay == freezed
           ? _value.total_pay
           : total_pay // ignore: cast_nullable_to_non_nullable
@@ -191,7 +206,8 @@ class __$UserAppOrderCopyWithImpl<$Res> extends _$UserAppOrderCopyWithImpl<$Res>
 /// @nodoc
 class _$_UserAppOrder with DiagnosticableTreeMixin implements _UserAppOrder {
   _$_UserAppOrder(
-      {this.total_pay,
+      {this.order_id,
+      this.total_pay,
       this.order_date_name,
       this.pay_countdown,
       this.object_data,
@@ -201,6 +217,8 @@ class _$_UserAppOrder with DiagnosticableTreeMixin implements _UserAppOrder {
   factory _$_UserAppOrder.fromJson(Map<String, dynamic> json) =>
       _$_$_UserAppOrderFromJson(json);
 
+  @override
+  final String? order_id;
   @override
   final String? total_pay;
   @override
@@ -217,7 +235,7 @@ class _$_UserAppOrder with DiagnosticableTreeMixin implements _UserAppOrder {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UserAppOrder(total_pay: $total_pay, order_date_name: $order_date_name, pay_countdown: $pay_countdown, object_data: $object_data, discount_coupon_record_balance: $discount_coupon_record_balance, order_status: $order_status)';
+    return 'UserAppOrder(order_id: $order_id, total_pay: $total_pay, order_date_name: $order_date_name, pay_countdown: $pay_countdown, object_data: $object_data, discount_coupon_record_balance: $discount_coupon_record_balance, order_status: $order_status)';
   }
 
   @override
@@ -225,6 +243,7 @@ class _$_UserAppOrder with DiagnosticableTreeMixin implements _UserAppOrder {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'UserAppOrder'))
+      ..add(DiagnosticsProperty('order_id', order_id))
       ..add(DiagnosticsProperty('total_pay', total_pay))
       ..add(DiagnosticsProperty('order_date_name', order_date_name))
       ..add(DiagnosticsProperty('pay_countdown', pay_countdown))
@@ -238,6 +257,9 @@ class _$_UserAppOrder with DiagnosticableTreeMixin implements _UserAppOrder {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _UserAppOrder &&
+            (identical(other.order_id, order_id) ||
+                const DeepCollectionEquality()
+                    .equals(other.order_id, order_id)) &&
             (identical(other.total_pay, total_pay) ||
                 const DeepCollectionEquality()
                     .equals(other.total_pay, total_pay)) &&
@@ -263,6 +285,7 @@ class _$_UserAppOrder with DiagnosticableTreeMixin implements _UserAppOrder {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(order_id) ^
       const DeepCollectionEquality().hash(total_pay) ^
       const DeepCollectionEquality().hash(order_date_name) ^
       const DeepCollectionEquality().hash(pay_countdown) ^
@@ -283,7 +306,8 @@ class _$_UserAppOrder with DiagnosticableTreeMixin implements _UserAppOrder {
 
 abstract class _UserAppOrder implements UserAppOrder {
   factory _UserAppOrder(
-      {String? total_pay,
+      {String? order_id,
+      String? total_pay,
       String? order_date_name,
       String? pay_countdown,
       List<UserObjectOrder>? object_data,
@@ -293,6 +317,8 @@ abstract class _UserAppOrder implements UserAppOrder {
   factory _UserAppOrder.fromJson(Map<String, dynamic> json) =
       _$_UserAppOrder.fromJson;
 
+  @override
+  String? get order_id => throw _privateConstructorUsedError;
   @override
   String? get total_pay => throw _privateConstructorUsedError;
   @override

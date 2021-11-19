@@ -76,9 +76,17 @@ Future<void> runBoostApp() async {
             debugShowCheckedModeBanner: false,
             title: '鹿优课',
             theme: new ThemeData(
+              ///主题色
               primaryColor: Color.fromRGBO(255, 139, 73, 1),
               appBarTheme: AppBarTheme(color: Color.fromRGBO(251, 251, 251, 1)),
               scaffoldBackgroundColor: const Color.fromRGBO(240, 240, 240, 1),
+              textTheme: TextTheme(
+
+                  ///默认字体
+                  bodyText2: TextStyle(
+                      fontWeight: FontWeight.w400, color: Colors.black),
+                  button: TextStyle(
+                      fontWeight: FontWeight.w400, color: Colors.black)),
             ),
             home: Material(
               child: home,

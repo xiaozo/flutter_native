@@ -20,7 +20,7 @@ class NetErrorWidget extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(top: 0.as),
             child: Text(
-              "${message ?? "暂无数据"}",
+              "${message ?? "当前暂无对应的数据内容"}",
               style: TextStyle(
                   fontSize: 14.sph, color: Color.fromRGBO(178, 178, 178, 1)),
             ),
