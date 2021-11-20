@@ -1,4 +1,4 @@
-export 'package:flutter_deerclass/net/dio_interceptors.dart';
+export 'package:flutter_deerclass/net/dio_handle.dart';
 
 export 'package:flutter_deerclass/utils/zykj_utils.dart';
 

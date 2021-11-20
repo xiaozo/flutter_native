@@ -4,8 +4,11 @@ import '../sp_size.dart';
 class NetErrorWidget extends StatelessWidget {
   final VoidCallback? callback;
   final String? message;
+  final String? errorImgAssetName;
 
-  NetErrorWidget({Key? key, this.callback, this.message}) : super(key: key);
+  NetErrorWidget(
+      {Key? key, this.callback, this.message, this.errorImgAssetName})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +17,9 @@ class NetErrorWidget extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Image(
-              image: new AssetImage('images/empty_img1.png'),
+              image: errorImgAssetName != null
+                  ? new AssetImage(errorImgAssetName!)
+                  : new AssetImage('images/empty_img1.png'),
               width: 335.as,
               height: 331.as),
           Container(

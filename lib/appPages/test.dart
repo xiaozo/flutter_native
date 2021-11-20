@@ -185,6 +185,7 @@ class _TestPageState extends State<TestPage> {
                 ),
                 Expanded(
                     child: RefreshBasePage(
+                  error: categories.error,
                   pageState: categories.pageState,
                   onLoading: (RefreshHandle handle) async {
                     await context
@@ -222,7 +223,10 @@ class _TestPageState extends State<TestPage> {
                       final userObjectOrder = model.object_data!.first;
                       return GestureDetector(
                         onTap: () {
-                          print("order_id:" + model.order_id.toString());
+                          // print("order_id:" + model.order_id.toString());
+                          debugPrint(ZykjUtils.getTimeStap(
+                                  formatData: '2018-11-15 11:15:29')
+                              .toString());
                         },
                         child: Container(
                           padding: EdgeInsets.fromLTRB(
@@ -345,10 +349,10 @@ class _TestPageState extends State<TestPage> {
                                                                   .end,
                                                           children: [
                                                             GradientButton(
-                                                              colors: [
-                                                                kGradientMainBColor,
-                                                                kgradientMainEColor
-                                                              ],
+                                                              // colors: [
+                                                              //   kGradientMainBColor,
+                                                              //   kgradientMainEColor
+                                                              // ],
                                                               onPressed: () {},
                                                               width: 78.as,
                                                               height: 25.as,
@@ -356,8 +360,16 @@ class _TestPageState extends State<TestPage> {
                                                                   .all(Radius
                                                                       .circular(
                                                                           12.0.as)),
-                                                              child:
-                                                                  Text('立即付款'),
+                                                              child: Text(
+                                                                '立即付款',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize:
+                                                                      12.0.as,
+                                                                ),
+                                                              ),
                                                             )
                                                           ],
                                                         )
@@ -396,7 +408,10 @@ class _TestPageState extends State<TestPage> {
                         _currentSortCondition = value;
                         p.item = p.item
                             .copyWith(order_status: _currentSortCondition.keys);
-
+                        if (_refreshController.refreshController.headerStatus ==
+                            RefreshStatus.refreshing) {
+                          _refreshController.refreshController.refreshToIdle();
+                        }
                         _refreshController.refreshController.requestRefresh();
                       });
                     })),

@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 extension ConverTimeSting on int {
   ///将秒转化成媒体对应的时间 '00:00'
   String get mediaTimeStr {
@@ -27,9 +29,51 @@ extension ConverTimeSting on int {
 }
 
 extension ToolConverForSting on String {
+  ///分页pagenum字符串++
   String pageNumIncreaseStr() {
     return (int.parse(this) + 1).toString();
   }
 }
 
-class ZykjUtils {}
+class ZykjUtils {
+  ///格式化时间戳
+  ///timeSamp:秒值
+  ///format:"yyyy年MM月dd hh:mm:ss"  "yyy?MM?dd  hh?MM?dd" "yyyy:MM:dd"......
+  ///结果： 2019?08?04  02?08?02
+  static String getFormatData(int timeSamp, {String format = 'yyyy-MM-dd'}) {
+    timeSamp = timeSamp * 1000;
+    var dataFormat = new DateFormat(format);
+    var dateTime = new DateTime.fromMillisecondsSinceEpoch(timeSamp);
+    String formatResult = dataFormat.format(dateTime);
+    return formatResult;
+  }
+
+  ///将时间日期格式转化为时间戳
+  ///2018年12月11日
+  ///2019-12-11
+  ///2018年11月15 11:14分89
+  ///结果是秒
+  static int getTimeStap({String? formatData}) {
+    if (formatData != null) {
+      var result = formatData.substring(0, 4) +
+          "-" +
+          formatData.substring(5, 7) +
+          "-" +
+          formatData.substring(8, 10);
+      if (formatData.toString().length >= 13) {
+        result += "" + formatData.substring(10, 13);
+      }
+      if (formatData.toString().length >= 17) {
+        result += ":" + formatData.substring(14, 16);
+      }
+      if (formatData.toString().length >= 19) {
+        result += ":" + formatData.substring(17, 19);
+      }
+      var dataTime = DateTime.parse(result);
+
+      return dataTime.millisecondsSinceEpoch ~/ 1000;
+    } else {
+      return DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    }
+  }
+}

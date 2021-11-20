@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_deerclass/net/base_error.dart';
 import 'package:flutter_deerclass/net/request_model/page.dart';
 import 'package:flutter_deerclass/ui/widgets/net_error_widget.dart';
 import 'package:flutter_deerclass/ui/widgets/page_state.dart';
@@ -16,7 +17,7 @@ class CommonBasePage extends StatelessWidget {
 
   final PageState pageState;
   final VoidCallback? buttonActionCallback;
-  final Exception? error;
+  final NetError? error;
 
   const CommonBasePage({
     Key? key,
@@ -57,7 +58,9 @@ class CommonBasePage extends StatelessWidget {
     } else if (pageState == PageState.emptyDataState ||
         pageState == PageState.errorState) {
       widgets.add(NetErrorWidget(
-          callback: buttonActionCallback, message: error?.message()));
+          callback: buttonActionCallback,
+          message: error?.message,
+          errorImgAssetName: error?.errorImgAssetName1));
     } else {
       // return child;
       widgets.add(child);
@@ -133,7 +136,7 @@ class RefreshBasePage extends CommonBasePage {
       VoidCallback? buttonActionCallback,
       AutoDisposeStateNotifierProvider<LoadingViewModel, LoadingState>?
           loadingStateNotifierProvider,
-      Exception? error})
+      NetError? error})
       : super(
             key: key,
             child: child,
@@ -158,7 +161,9 @@ class RefreshBasePage extends CommonBasePage {
     } else if (pageState == PageState.emptyDataState ||
         pageState == PageState.errorState) {
       childWidget = NetErrorWidget(
-          callback: buttonActionCallback, message: error?.message());
+          callback: buttonActionCallback,
+          message: error?.message,
+          errorImgAssetName: error?.errorImgAssetName1);
     } else {
       childWidget = child;
     }
@@ -176,9 +181,12 @@ class RefreshBasePage extends CommonBasePage {
 
         if (onRefresh != null) {
           onRefresh!((PageState pageState) {
-            if (pageState == PageState.errorState) {
+            if (pageState == PageState.errorState ||
+                pageState == PageState.ignoreState) {
               refreshController.refreshCompleted();
-              refreshController.loadNoData();
+              if (pageState == PageState.errorState) {
+                refreshController.loadNoData();
+              }
             } else {
               refreshController.refreshCompleted();
               changePageNum(pageNum + 1);
@@ -191,7 +199,8 @@ class RefreshBasePage extends CommonBasePage {
         if (onLoading != null) {
           onLoading!((PageState pageState) {
             if (pageState == PageState.errorState ||
-                pageState == PageState.noMoreDataState) {
+                pageState == PageState.noMoreDataState ||
+                pageState == PageState.ignoreState) {
               refreshController.loadNoData();
             } else {
               refreshController.loadComplete();

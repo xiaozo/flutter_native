@@ -76,7 +76,7 @@ flutter:
   assets:
     - images/
     - images/empty_img1.png
-
+    - images/empty_img2.png
   # To add Flutter specific assets to your application, add an assets section,
   # like this:
   # assets:

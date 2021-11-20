@@ -19,6 +19,7 @@ class UserAppOrder with _$UserAppOrder {
     List<UserObjectOrder>? object_data,
     String? discount_coupon_record_balance,
     @JsonKey(fromJson: anyToInt) int? order_status,
+    @JsonKey(fromJson: anyToInt) int? order_time,
   }) = _UserAppOrder;
 
   factory UserAppOrder.fromJson(Map<String, dynamic> json) =>

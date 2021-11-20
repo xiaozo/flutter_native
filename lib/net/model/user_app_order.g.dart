@@ -18,6 +18,7 @@ _$_UserAppOrder _$_$_UserAppOrderFromJson(Map<String, dynamic> json) {
     discount_coupon_record_balance:
         json['discount_coupon_record_balance'] as String?,
     order_status: anyToInt(json['order_status']),
+    order_time: anyToInt(json['order_time']),
   );
 }
 
@@ -30,4 +31,5 @@ Map<String, dynamic> _$_$_UserAppOrderToJson(_$_UserAppOrder instance) =>
       'object_data': instance.object_data,
       'discount_coupon_record_balance': instance.discount_coupon_record_balance,
       'order_status': instance.order_status,
+      'order_time': instance.order_time,
     };

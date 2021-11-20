@@ -27,7 +27,8 @@ class _$UserAppOrderTearOff {
       String? pay_countdown,
       List<UserObjectOrder>? object_data,
       String? discount_coupon_record_balance,
-      @JsonKey(fromJson: anyToInt) int? order_status}) {
+      @JsonKey(fromJson: anyToInt) int? order_status,
+      @JsonKey(fromJson: anyToInt) int? order_time}) {
     return _UserAppOrder(
       order_id: order_id,
       total_pay: total_pay,
@@ -36,6 +37,7 @@ class _$UserAppOrderTearOff {
       object_data: object_data,
       discount_coupon_record_balance: discount_coupon_record_balance,
       order_status: order_status,
+      order_time: order_time,
     );
   }
 
@@ -58,6 +60,8 @@ mixin _$UserAppOrder {
       throw _privateConstructorUsedError;
   @JsonKey(fromJson: anyToInt)
   int? get order_status => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: anyToInt)
+  int? get order_time => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -77,7 +81,8 @@ abstract class $UserAppOrderCopyWith<$Res> {
       String? pay_countdown,
       List<UserObjectOrder>? object_data,
       String? discount_coupon_record_balance,
-      @JsonKey(fromJson: anyToInt) int? order_status});
+      @JsonKey(fromJson: anyToInt) int? order_status,
+      @JsonKey(fromJson: anyToInt) int? order_time});
 }
 
 /// @nodoc
@@ -97,6 +102,7 @@ class _$UserAppOrderCopyWithImpl<$Res> implements $UserAppOrderCopyWith<$Res> {
     Object? object_data = freezed,
     Object? discount_coupon_record_balance = freezed,
     Object? order_status = freezed,
+    Object? order_time = freezed,
   }) {
     return _then(_value.copyWith(
       order_id: order_id == freezed
@@ -127,6 +133,10 @@ class _$UserAppOrderCopyWithImpl<$Res> implements $UserAppOrderCopyWith<$Res> {
           ? _value.order_status
           : order_status // ignore: cast_nullable_to_non_nullable
               as int?,
+      order_time: order_time == freezed
+          ? _value.order_time
+          : order_time // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -145,7 +155,8 @@ abstract class _$UserAppOrderCopyWith<$Res>
       String? pay_countdown,
       List<UserObjectOrder>? object_data,
       String? discount_coupon_record_balance,
-      @JsonKey(fromJson: anyToInt) int? order_status});
+      @JsonKey(fromJson: anyToInt) int? order_status,
+      @JsonKey(fromJson: anyToInt) int? order_time});
 }
 
 /// @nodoc
@@ -167,6 +178,7 @@ class __$UserAppOrderCopyWithImpl<$Res> extends _$UserAppOrderCopyWithImpl<$Res>
     Object? object_data = freezed,
     Object? discount_coupon_record_balance = freezed,
     Object? order_status = freezed,
+    Object? order_time = freezed,
   }) {
     return _then(_UserAppOrder(
       order_id: order_id == freezed
@@ -197,6 +209,10 @@ class __$UserAppOrderCopyWithImpl<$Res> extends _$UserAppOrderCopyWithImpl<$Res>
           ? _value.order_status
           : order_status // ignore: cast_nullable_to_non_nullable
               as int?,
+      order_time: order_time == freezed
+          ? _value.order_time
+          : order_time // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -212,7 +228,8 @@ class _$_UserAppOrder with DiagnosticableTreeMixin implements _UserAppOrder {
       this.pay_countdown,
       this.object_data,
       this.discount_coupon_record_balance,
-      @JsonKey(fromJson: anyToInt) this.order_status});
+      @JsonKey(fromJson: anyToInt) this.order_status,
+      @JsonKey(fromJson: anyToInt) this.order_time});
 
   factory _$_UserAppOrder.fromJson(Map<String, dynamic> json) =>
       _$_$_UserAppOrderFromJson(json);
@@ -232,10 +249,13 @@ class _$_UserAppOrder with DiagnosticableTreeMixin implements _UserAppOrder {
   @override
   @JsonKey(fromJson: anyToInt)
   final int? order_status;
+  @override
+  @JsonKey(fromJson: anyToInt)
+  final int? order_time;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UserAppOrder(order_id: $order_id, total_pay: $total_pay, order_date_name: $order_date_name, pay_countdown: $pay_countdown, object_data: $object_data, discount_coupon_record_balance: $discount_coupon_record_balance, order_status: $order_status)';
+    return 'UserAppOrder(order_id: $order_id, total_pay: $total_pay, order_date_name: $order_date_name, pay_countdown: $pay_countdown, object_data: $object_data, discount_coupon_record_balance: $discount_coupon_record_balance, order_status: $order_status, order_time: $order_time)';
   }
 
   @override
@@ -250,7 +270,8 @@ class _$_UserAppOrder with DiagnosticableTreeMixin implements _UserAppOrder {
       ..add(DiagnosticsProperty('object_data', object_data))
       ..add(DiagnosticsProperty(
           'discount_coupon_record_balance', discount_coupon_record_balance))
-      ..add(DiagnosticsProperty('order_status', order_status));
+      ..add(DiagnosticsProperty('order_status', order_status))
+      ..add(DiagnosticsProperty('order_time', order_time));
   }
 
   @override
@@ -279,7 +300,10 @@ class _$_UserAppOrder with DiagnosticableTreeMixin implements _UserAppOrder {
                     discount_coupon_record_balance)) &&
             (identical(other.order_status, order_status) ||
                 const DeepCollectionEquality()
-                    .equals(other.order_status, order_status)));
+                    .equals(other.order_status, order_status)) &&
+            (identical(other.order_time, order_time) ||
+                const DeepCollectionEquality()
+                    .equals(other.order_time, order_time)));
   }
 
   @override
@@ -291,7 +315,8 @@ class _$_UserAppOrder with DiagnosticableTreeMixin implements _UserAppOrder {
       const DeepCollectionEquality().hash(pay_countdown) ^
       const DeepCollectionEquality().hash(object_data) ^
       const DeepCollectionEquality().hash(discount_coupon_record_balance) ^
-      const DeepCollectionEquality().hash(order_status);
+      const DeepCollectionEquality().hash(order_status) ^
+      const DeepCollectionEquality().hash(order_time);
 
   @JsonKey(ignore: true)
   @override
@@ -312,7 +337,8 @@ abstract class _UserAppOrder implements UserAppOrder {
       String? pay_countdown,
       List<UserObjectOrder>? object_data,
       String? discount_coupon_record_balance,
-      @JsonKey(fromJson: anyToInt) int? order_status}) = _$_UserAppOrder;
+      @JsonKey(fromJson: anyToInt) int? order_status,
+      @JsonKey(fromJson: anyToInt) int? order_time}) = _$_UserAppOrder;
 
   factory _UserAppOrder.fromJson(Map<String, dynamic> json) =
       _$_UserAppOrder.fromJson;
@@ -333,6 +359,9 @@ abstract class _UserAppOrder implements UserAppOrder {
   @override
   @JsonKey(fromJson: anyToInt)
   int? get order_status => throw _privateConstructorUsedError;
+  @override
+  @JsonKey(fromJson: anyToInt)
+  int? get order_time => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$UserAppOrderCopyWith<_UserAppOrder> get copyWith =>
