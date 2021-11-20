@@ -185,7 +185,10 @@ class GradientAppBar extends StatefulWidget implements PreferredSizeWidget {
     this.primary = true,
     this.centerTitle,
     this.excludeHeaderSemantics = false,
-    this.titleSpacing = AppNavigationToolbar.kMiddleSpacing,
+    // this.titleSpacing = AppNavigationToolbar.kMiddleSpacing,
+    this.titleSpacing = 5.0,
+    this.leadingSpacing = 5.0,
+    this.actionSpacing = 5.0,
     this.toolbarOpacity = 1.0,
     this.bottomOpacity = 1.0,
     this.gradientStart,
@@ -423,6 +426,9 @@ class GradientAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Color gradientStart;
   final Color gradientEnd;
 
+  final double leadingSpacing;
+  final double actionSpacing;
+
   final List<Widget> leadings;
 
   bool _getEffectiveCenterTitle(ThemeData theme) {
@@ -561,15 +567,24 @@ class _GradientAppBarState extends State<GradientAppBar> {
         //加入item的间距
         int index = 0;
         int insertIndex = 1;
-        while (index < widget.leadings.length - 1) {
+        int count = widget.leadings.length;
+        while (index < count - 1) {
           Widget tempWidget = widget.leadings[index];
           if (!(tempWidget is IconButton)) {
             widget.leadings.insert(insertIndex, SizedBox(width: 5.0));
+            insertIndex += 2;
           }
-          insertIndex += 2;
+
           index++;
         }
       }
+
+      if (widget.leadingSpacing > 0 &&
+          widget.leadings != null &&
+          widget.leadings.isNotEmpty) {
+        widget.leadings.insert(0, SizedBox(width: widget.leadingSpacing));
+      }
+
       leadings = Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -583,15 +598,25 @@ class _GradientAppBarState extends State<GradientAppBar> {
         //加入item的间距
         int index = 0;
         int insertIndex = 1;
-        while (index < widget.actions.length - 1) {
+        int count = widget.actions.length;
+        while (index < count - 1) {
           Widget tempWidget = widget.actions[index];
           if (!(tempWidget is IconButton)) {
             widget.actions.insert(insertIndex, SizedBox(width: 5.0));
+            insertIndex += 2;
           }
-          insertIndex += 2;
+
           index++;
         }
       }
+
+      if (widget.actionSpacing > 0 &&
+          widget.actions != null &&
+          widget.actions.isNotEmpty) {
+        widget.actions.insert(
+            widget.actions.length, SizedBox(width: widget.actionSpacing));
+      }
+
       actions = Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,

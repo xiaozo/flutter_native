@@ -167,7 +167,9 @@ class _TestPageState extends State<TestPage> {
             title: MyAppNavTitle(
               title: '我的订单',
             ),
-            leading: BackButtonV2(),
+            leadings: [
+              BackButtonV2(),
+            ],
           ),
         ),
         body: Consumer(builder: (context, watch, _) {
