@@ -92,7 +92,9 @@ extension AppHttpErrorHandle on Exception {
 
   ///
   PageException pageException(
-      {String? netErrorMsg, String Function(int code)? msgByCodeCallback}) {
+      {String? netErrorMsg,
+      String? errorImgAssetName,
+      String Function(int code)? msgByCodeCallback}) {
     PageState pageState = PageState.initializedState;
     NetError? netError = null;
     if (isIgnore()) {
@@ -106,15 +108,23 @@ extension AppHttpErrorHandle on Exception {
               : this.message());
 
       pageState = PageState.errorState;
-      netError = NetError(errorCode(), message);
+      netError =
+          NetError(errorCode(), message, errorImgAssetName1: errorImgAssetName);
     }
-    return PageException(pageState: pageState, netError: netError);
+    return PageException(
+      pageState: pageState,
+      netError: netError,
+    );
   }
 
   ViewModelState pageExceptionState(ViewModelState viewModelState,
-      {String? netErrorMsg, String Function(int code)? msgByCodeCallback}) {
+      {String? netErrorMsg,
+      String? errorImgAssetName,
+      String Function(int code)? msgByCodeCallback}) {
     PageException pageException = this.pageException(
-        netErrorMsg: netErrorMsg, msgByCodeCallback: msgByCodeCallback);
+        netErrorMsg: netErrorMsg,
+        errorImgAssetName: errorImgAssetName,
+        msgByCodeCallback: msgByCodeCallback);
     return viewModelState.copyWith(
         pageState: pageException.pageState, error: pageException.netError);
   }
