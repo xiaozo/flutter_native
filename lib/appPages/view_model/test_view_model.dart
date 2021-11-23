@@ -10,7 +10,7 @@ import 'package:dio/dio.dart';
 
 import 'view_model_state.dart';
 
-class TestState with ViewModelState {
+class TestState implements ViewModelState {
   final List<UserAppOrder> userAppOrders;
   final PageState pageState; // 页面状态类
   final NetError? error; // 根据后端返回的错误的错误类
