@@ -64,5 +64,5 @@ flutter pub run pigeon \
   --dart_null_safety \
   --input pigeons/$input.dart \
   --dart_out lib/channel/$out.dart \
-  --java_out ../app/src/main/java/com/histudio/app/flutter/$name.java \
+  --java_out ../zykjappclient-android/app/src/main/java/com/histudio/app/flutter/$name.java \
   --java_package "com.histudio.app.flutter"

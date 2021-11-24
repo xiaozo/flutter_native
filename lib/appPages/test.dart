@@ -184,6 +184,8 @@ class _TestPageState extends State<TestPage> {
                   controller: _controller,
                   stackKey: _stackKey,
                   style: TextStyle(color: Color(0xFF666666), fontSize: 12.sph),
+                  dropDownStyle: TextStyle(
+                      color: Theme.of(context).primaryColor, fontSize: 12.sph),
                 ),
                 Expanded(
                     child: RefreshBasePage(
