@@ -18,8 +18,8 @@ class BackButtonV2 extends StatelessWidget {
             BoostNavigator.instance.pop();
           },
       child: Container(
-        height: 27,
         width: 28,
+        height: 27,
         child: Row(
           children: [
             Image(
@@ -35,27 +35,13 @@ class BackButtonV2 extends StatelessWidget {
         ),
       ),
     );
-    return ImageButtonV2(
-      width: 16,
-      height: 30,
-      pressedImage: Image.asset(
-        "images/return_action.png",
-      ),
-      unpressedImage: Image.asset(
-        "images/return_action.png",
-      ),
-      children: [],
-      onTap: onPressed ??
-          () {
-            BoostNavigator.instance.pop();
-          },
-    );
-    return BackButton(
-      color: Colors.black,
-      onPressed: onPressed ??
-          () {
-            BoostNavigator.instance.pop();
-          },
-    );
+
+    // return BackButton(
+    //   color: Colors.black,
+    //   onPressed: onPressed ??
+    //       () {
+    //         BoostNavigator.instance.pop();
+    //       },
+    // );
   }
 }

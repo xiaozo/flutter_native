@@ -1,6 +1,7 @@
 // @dart=2.9
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,36 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 class CustomFlutterBinding extends WidgetsFlutterBinding
     with BoostFlutterBinding {}
 
+///全局生命周期监听示例
+class AppLifecycleObserver with GlobalPageVisibilityObserver {
+  void onPagePush(Route<dynamic> route) {
+    super.onPagePush(route);
+    try {
+      if (Platform.isAndroid) {
+        SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarBrightness: Brightness.dark);
+        SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+      }
+    } catch (e) {}
+  }
+
+  @override
+  void onPageShow(Route route) {
+    super.onPageShow(route);
+    try {
+      if (Platform.isAndroid) {
+        SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarBrightness: Brightness.dark);
+        SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+      }
+    } catch (e) {}
+
+    print("AppLifecycleObserver - onPageShow");
+  }
+}
+
 void main() {
   FlutterError.onError = (FlutterErrorDetails details) async {
     //将异常转发至Zone
@@ -47,6 +78,8 @@ Future<void> runBoostApp() async {
   WidgetsFlutterBinding.ensureInitialized();
   await setupDebug();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+  PageVisibilityBinding.instance.addGlobalObserver(AppLifecycleObserver());
 
   debugPaintSizeEnabled = false;
   debugRepaintRainbowEnabled = false;

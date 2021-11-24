@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import '../screen.dart';
@@ -9,7 +11,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => Size.fromHeight(44);
+  Size get preferredSize => Size.fromHeight(Platform.isAndroid ? 56.as : 44);
 
   @override
   Widget build(BuildContext context) {

@@ -8,14 +8,8 @@ import 'dart:io';
 
 RoutePageBuilder _wrapSize(RoutePageBuilder builder) {
   return (context, __, ___) {
-    if (Platform.isAndroid) {
-      SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-          statusBarBrightness: Brightness.dark);
-      SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
-    }
-
     dependScreenSize(context);
+
     return builder(context, __, ___);
   };
 }
