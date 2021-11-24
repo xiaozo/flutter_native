@@ -187,8 +187,8 @@ class GradientAppBar extends StatefulWidget implements PreferredSizeWidget {
     this.excludeHeaderSemantics = false,
     // this.titleSpacing = AppNavigationToolbar.kMiddleSpacing,
     this.titleSpacing = 5.0,
-    this.leadingSpacing = 5.0,
-    this.actionSpacing = 5.0,
+    this.leadingSpacing = 15.0,
+    this.actionSpacing = 15.0,
     this.toolbarOpacity = 1.0,
     this.bottomOpacity = 1.0,
     this.gradientStart,
@@ -579,12 +579,6 @@ class _GradientAppBarState extends State<GradientAppBar> {
         }
       }
 
-      if (widget.leadingSpacing > 0 &&
-          widget.leadings != null &&
-          widget.leadings.isNotEmpty) {
-        widget.leadings.insert(0, SizedBox(width: widget.leadingSpacing));
-      }
-
       leadings = Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -608,13 +602,6 @@ class _GradientAppBarState extends State<GradientAppBar> {
 
           index++;
         }
-      }
-
-      if (widget.actionSpacing > 0 &&
-          widget.actions != null &&
-          widget.actions.isNotEmpty) {
-        widget.actions.insert(
-            widget.actions.length, SizedBox(width: widget.actionSpacing));
       }
 
       actions = Row(

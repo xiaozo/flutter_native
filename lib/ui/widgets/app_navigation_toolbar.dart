@@ -103,7 +103,7 @@ class _ToolbarLayout extends MultiChildLayoutDelegate {
   void performLayout(Size size) {
     double leadingWidth = 0.0;
     double trailingWidth = 0.0;
-    double navItemSpacing = 10.0;
+    double navItemSpacing = 15.0;
     double middleMinxStartX = 0.0;
     double middleMaxEndX = size.width;
     if (hasChild(_ToolbarSlot.leading)) {
@@ -127,8 +127,10 @@ class _ToolbarLayout extends MultiChildLayoutDelegate {
           middleMinxStartX = leadingX + leadingWidth + middleSpacing;
           break;
       }
+
+      final double leadingY = (size.height - leadingSize.height) / 2.0;
       leadingWidth += navItemSpacing;
-      positionChild(_ToolbarSlot.leading, Offset(leadingX, 0.0));
+      positionChild(_ToolbarSlot.leading, Offset(leadingX, leadingY));
     }
 
     if (hasChild(_ToolbarSlot.trailing)) {

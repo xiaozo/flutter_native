@@ -115,6 +115,7 @@ class JslHttpInterceptor extends Interceptor {
     FJSLNetParams params = FJSLNetParams();
     params.function = options.path;
     params.inputData = options.data as Map;
+
     FJSLNetEncryptResult p = await NetHostApi().jslParamsEncrypt(params);
     Map<String, dynamic> newdata = Map();
     newdata["encrypt"] = p.encrypt;

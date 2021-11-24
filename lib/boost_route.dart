@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_boost/flutter_boost.dart';
 import 'appPages/Test.dart';
 import 'ui/screen.dart';
+import 'dart:io';
 
 RoutePageBuilder _wrapSize(RoutePageBuilder builder) {
   return (context, __, ___) {
+    if (Platform.isAndroid) {
+      SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarBrightness: Brightness.dark);
+      SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+    }
+
     dependScreenSize(context);
     return builder(context, __, ___);
   };
