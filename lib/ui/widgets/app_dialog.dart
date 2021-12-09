@@ -9,14 +9,23 @@ Future<T?> showAppDialog<T>({
   String? barrierLabel,
   bool useRootNavigator = true,
   bool barrierDismissible = false,
-  RouteSettings? routeSettings,
 }) {
   if (Platform.isIOS) {
     //ios相关代码
-    return showCupertinoDialog(context: context, builder: builder);
+    return showCupertinoDialog(
+        context: context,
+        builder: builder,
+        barrierLabel: barrierLabel,
+        barrierDismissible: barrierDismissible,
+        routeSettings: RouteSettings(name: "Popdisappeared_AppDialog"));
   } else {
     //android相关代码
-    return showDialog(context: context, builder: builder);
+    return showDialog(
+        context: context,
+        builder: builder,
+        barrierLabel: barrierLabel,
+        barrierDismissible: barrierDismissible,
+        routeSettings: RouteSettings(name: "Popdisappeared_AppDialog"));
   }
 }
 

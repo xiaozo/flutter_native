@@ -55,6 +55,11 @@ class AppLifecycleObserver with GlobalPageVisibilityObserver {
 
     print("AppLifecycleObserver - onPageShow");
   }
+
+  void onPagePop(Route<dynamic> route) {
+    super.onPagePop(route);
+    while (Navigator.of(appContext).canPop()) Navigator.of(appContext).pop();
+  }
 }
 
 void main() {

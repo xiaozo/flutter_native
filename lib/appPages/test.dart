@@ -21,6 +21,7 @@ import 'view_model/test_view_model.dart';
 import 'package:flutter_deerclass/deer_class.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_deerclass/pro_global.dart';
+import 'package:flutter_boost/flutter_boost.dart';
 
 final orderlistProvider = StateNotifierProvider.autoDispose
     .family<TestViewModel, TestState, TTuple<UserOrderListParams>>(
@@ -179,10 +180,14 @@ class _TestPageState extends State<TestPage> {
                 //           title: Text('提示'),
                 //           content: Text('确认删除吗？'),
                 //           actions: [
-                //             dialogAction(context, "cc"),
+                //             dialogAction(context, "cc", onPressed: () {
+                //               RouteSettings route1 =
+                //                   ModalRoute.of(context)!.settings;
+                //               print("object");
+                //             }),
                 //             dialogAction(context, "cc1", onPressed: () {
                 //               Navigator.of(context).pop('ok');
-                //             })
+                //             }),
                 //           ]);
                 //     },
                 //   );
