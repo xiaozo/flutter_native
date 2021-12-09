@@ -35,8 +35,8 @@ Widget dialog(BuildContext context,
 
 Widget dialogAction(BuildContext context, String title,
     {VoidCallback? onPressed, Color? textColor, double? fontSize}) {
-  textColor = textColor ?? Theme.of(context).primaryColor;
-  fontSize = fontSize ?? 14.sph;
+  textColor ??= Theme.of(context).primaryColor;
+  fontSize ??= fontSize ?? 14.sph;
   TextStyle style = TextStyle(color: textColor, fontSize: fontSize);
   if (Platform.isIOS) {
     //ios相关代码
