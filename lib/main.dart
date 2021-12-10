@@ -91,6 +91,8 @@ Future<void> runBoostApp() async {
 
   getIt<NetConfigRepo>().update(await NetHostApi().getSecret());
 
+  GlobalKey rootWidgetKey = getIt.get(instanceName: KGETIT_ROOTWIDGETKEY);
+
   runApp(ProviderScope(
       overrides: [
         restClientProvider.overrideWithValue(buildRestClient()),
@@ -126,8 +128,11 @@ Future<void> runBoostApp() async {
                   button: TextStyle(
                       fontWeight: FontWeight.w400, color: Colors.black)),
             ),
-            home: Material(
-              child: home,
+            home: RepaintBoundary(
+              key: rootWidgetKey,
+              child: Material(
+                child: home,
+              ),
             ),
             builder: (context, widget) {
               return MediaQuery(

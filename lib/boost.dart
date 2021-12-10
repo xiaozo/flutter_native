@@ -5,11 +5,13 @@ import 'package:flutter_deerclass/channel/notification_info_channel.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'boost_route.dart';
+import 'channel/flutter_method_channel.dart';
 import 'channel/net_channel_all.dart';
 import 'channel/page_event_channel.dart';
 import 'channel/page_visibility_channel.dart';
 import 'event/page_event_binding.dart';
 import 'event/page_view_event_binding.dart';
+import 'flutter_method_impl.dart';
 import 'flutter_notification.dart';
 import 'get_it.dart';
 import 'net/net_config_repo.dart';
@@ -75,10 +77,12 @@ class BoostApp extends HookWidget {
       PageVisibilityApi.setup(_PageVisibilityApiImpl.instance);
       PageEventApi.setup(_PageEventApiImpl());
       NotificationInfoApi.setup(NotificationInfoApiImpl());
+      FlutterMethodApi.setup(FlutterMethodApiImpl());
       return () {
         PageVisibilityApi.setup(null);
         PageEventApi.setup(null);
         NotificationInfoApi.setup(null);
+        FlutterMethodApi.setup(null);
       };
     });
 

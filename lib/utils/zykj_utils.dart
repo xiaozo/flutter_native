@@ -87,7 +87,7 @@ class ZykjUtils {
     try {
       RenderRepaintBoundary boundary = rootWidgetKe.currentContext!
           .findRenderObject() as RenderRepaintBoundary;
-      var image = await boundary.toImage(pixelRatio: 3.0);
+      var image = await boundary.toImage(pixelRatio: 1.0);
       ByteData byteData =
           (await image.toByteData(format: ImageByteFormat.png))!;
       Uint8List pngBytes = byteData.buffer.asUint8List();

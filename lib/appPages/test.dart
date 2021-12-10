@@ -172,27 +172,30 @@ class _TestPageState extends State<TestPage> {
               title: '我的订单',
             ),
             leading: BackButtonV2(
-                // onPressed: () {
-                //   showAppDialog(
-                //     context: context,
-                //     builder: (context) {
-                //       return dialog(context,
-                //           title: Text('提示'),
-                //           content: Text('确认删除吗？'),
-                //           actions: [
-                //             dialogAction(context, "cc", onPressed: () {
-                //               RouteSettings route1 =
-                //                   ModalRoute.of(context)!.settings;
-                //               print("object");
-                //             }),
-                //             dialogAction(context, "cc1", onPressed: () {
-                //               Navigator.of(context).pop('ok');
-                //             }),
-                //           ]);
-                //     },
-                //   );
-                // },
-                ),
+              onPressed: () {
+                showAppDialog(
+                  context: context,
+                  builder: (context) {
+                    return dialog(context,
+                        title: Text('提示'),
+                        content: Text('确认删除吗？'),
+                        actions: [
+                          dialogAction(context, "cc", onPressed: () {
+                            // showGlobalDialog();
+                            BoostNavigator.instance.push("/test_page",
+                                withContainer: true,
+
+                                ///如果开启新容器，需要指定opaque为false
+                                opaque: false);
+                          }),
+                          dialogAction(context, "cc1", onPressed: () {
+                            Navigator.of(context).pop('ok');
+                          }),
+                        ]);
+                  },
+                );
+              },
+            ),
           ),
         ),
         body: Consumer(builder: (context, watch, _) {
@@ -254,6 +257,12 @@ class _TestPageState extends State<TestPage> {
                           debugPrint(ZykjUtils.getTimeStap(
                                   formatData: '2018-11-15 11:15:29')
                               .toString());
+
+                          BoostNavigator.instance.push("/test_page",
+                              withContainer: true,
+
+                              ///如果开启新容器，需要指定opaque为false
+                              opaque: false);
                         },
                         child: Container(
                           padding: EdgeInsets.fromLTRB(
