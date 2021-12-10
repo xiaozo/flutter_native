@@ -1,3 +1,8 @@
+import 'dart:typed_data';
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 
 extension ConverTimeSting on int {
@@ -75,5 +80,21 @@ class ZykjUtils {
     } else {
       return DateTime.now().millisecondsSinceEpoch ~/ 1000;
     }
+  }
+
+  ///截屏
+  static Future<Uint8List?> captureScreen(GlobalKey rootWidgetKe) async {
+    try {
+      RenderRepaintBoundary boundary = rootWidgetKe.currentContext!
+          .findRenderObject() as RenderRepaintBoundary;
+      var image = await boundary.toImage(pixelRatio: 3.0);
+      ByteData byteData =
+          (await image.toByteData(format: ImageByteFormat.png))!;
+      Uint8List pngBytes = byteData.buffer.asUint8List();
+      return pngBytes; //这个对象就是图片数据
+    } catch (e) {
+      print(e);
+    }
+    return null;
   }
 }
