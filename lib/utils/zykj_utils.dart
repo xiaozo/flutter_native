@@ -83,17 +83,18 @@ class ZykjUtils {
   }
 
   ///截屏
-  static Future<Uint8List?> captureScreen(GlobalKey rootWidgetKe) async {
+  static Future<Uint8List?> captureScreen(GlobalKey rootWidgetKey,
+      {double pixelRatio = 1.0}) async {
     try {
-      RenderRepaintBoundary boundary = rootWidgetKe.currentContext!
+      RenderRepaintBoundary boundary = rootWidgetKey.currentContext!
           .findRenderObject() as RenderRepaintBoundary;
-      var image = await boundary.toImage(pixelRatio: 1.0);
+      var image = await boundary.toImage(pixelRatio: pixelRatio);
       ByteData byteData =
           (await image.toByteData(format: ImageByteFormat.png))!;
       Uint8List pngBytes = byteData.buffer.asUint8List();
       return pngBytes; //这个对象就是图片数据
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
     return null;
   }

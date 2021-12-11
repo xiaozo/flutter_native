@@ -172,30 +172,30 @@ class _TestPageState extends State<TestPage> {
               title: '我的订单',
             ),
             leading: BackButtonV2(
-              onPressed: () {
-                showAppDialog(
-                  context: context,
-                  builder: (context) {
-                    return dialog(context,
-                        title: Text('提示'),
-                        content: Text('确认删除吗？'),
-                        actions: [
-                          dialogAction(context, "cc", onPressed: () {
-                            // showGlobalDialog();
-                            BoostNavigator.instance.push("/test_page",
-                                withContainer: true,
+                // onPressed: () {
+                //   showAppDialog(
+                //     context: context,
+                //     builder: (context) {
+                //       return dialog(context,
+                //           title: Text('提示'),
+                //           content: Text('确认删除吗？'),
+                //           actions: [
+                //             dialogAction(context, "cc", onPressed: () {
+                //               // showGlobalDialog();
+                //               BoostNavigator.instance.push("/test_page",
+                //                   withContainer: true,
 
-                                ///如果开启新容器，需要指定opaque为false
-                                opaque: false);
-                          }),
-                          dialogAction(context, "cc1", onPressed: () {
-                            Navigator.of(context).pop('ok');
-                          }),
-                        ]);
-                  },
-                );
-              },
-            ),
+                //                   ///如果开启新容器，需要指定opaque为false
+                //                   opaque: false);
+                //             }),
+                //             dialogAction(context, "cc1", onPressed: () {
+                //               Navigator.of(context).pop('ok');
+                //             }),
+                //           ]);
+                //     },
+                //   );
+                // },
+                ),
           ),
         ),
         body: Consumer(builder: (context, watch, _) {

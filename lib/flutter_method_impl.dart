@@ -16,7 +16,8 @@ class FlutterMethodApiImpl extends FlutterMethodApi {
     // TODO: implement screenshot
     FScreenshotResult result = FScreenshotResult();
     result.imageBytes = await ZykjUtils.captureScreen(
-        getIt.get(instanceName: KGETIT_ROOTWIDGETKEY));
+        getIt.get(instanceName: KGETIT_ROOTWIDGETKEY),
+        pixelRatio: 1.5);
     return result;
   }
 }
