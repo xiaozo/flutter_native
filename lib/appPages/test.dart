@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_deerclass/net/request_model/page.dart';
@@ -17,11 +18,39 @@ import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'custom_test.dart';
 import 'view_model/test_view_model.dart';
 import 'package:flutter_deerclass/deer_class.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_deerclass/pro_global.dart';
 import 'package:flutter_boost/flutter_boost.dart';
+
+class _SingleTouchRecognizer extends OneSequenceGestureRecognizer {
+  bool scrollEnabled = false;
+
+  _SingleTouchRecognizer();
+
+  @override
+  void addPointer(PointerEvent event) {
+    startTrackingPointer(event.pointer);
+  }
+
+  @override
+  void acceptGesture(int pointer) {
+    print("object");
+  }
+
+  @override
+  String get debugDescription => 'custom';
+
+  @override
+  void didStopTrackingLastPointer(int pointer) {}
+
+  @override
+  void handleEvent(PointerEvent event) {
+    resolve(GestureDisposition.rejected);
+  }
+}
 
 final orderlistProvider = StateNotifierProvider.autoDispose
     .family<TestViewModel, TestState, TTuple<UserOrderListParams>>(
@@ -101,17 +130,54 @@ class _TestPageState extends State<TestPage> {
 
   Widget _buildConditionListWidget(
       void itemOnTap(SortCondition sortCondition)) {
-    return ListView.separated(
-      shrinkWrap: true,
-      scrollDirection: Axis.vertical,
-      itemCount: _typeConditions.length,
-      // item 的个数
-      separatorBuilder: (BuildContext context, int index) =>
-          Divider(height: 1.0),
-      // 添加分割线
-      itemBuilder: (BuildContext context, int index) {
-        return gestureDetector(index, itemOnTap, context);
+    return RawGestureDetector(
+      gestures: <Type, GestureRecognizerFactory>{
+        _SingleTouchRecognizer:
+            GestureRecognizerFactoryWithHandlers<_SingleTouchRecognizer>(
+          () => _SingleTouchRecognizer(),
+          (_SingleTouchRecognizer instance) {},
+        ),
       },
+      child: ListView.separated(
+        shrinkWrap: true,
+        scrollDirection: Axis.vertical,
+        itemCount: _typeConditions.length,
+        // item 的个数
+        separatorBuilder: (BuildContext context, int index) =>
+            Divider(height: 1.0),
+        // 添加分割线
+        itemBuilder: (BuildContext context, int index) {
+          // return gestureDetector(index, itemOnTap, context);
+          String str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          return Container(
+            height: 100,
+            child: SingleChildScrollView1(
+              padding: EdgeInsets.all(16.0),
+              child: Container(
+                padding: EdgeInsets.all(16.0),
+                height: 200,
+                color: Colors.red,
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.all(16.0),
+                  child: Center(
+                    child: Column(
+                      //动态创建一个List<Widget>
+                      children: str
+                          .split("")
+                          //每一个字母都用一个Text显示,字体为原来的两倍
+                          .map((c) => Text(
+                                c,
+                                textScaleFactor: 2.0,
+                              ))
+                          .toList(),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -172,30 +238,30 @@ class _TestPageState extends State<TestPage> {
               title: '我的订单',
             ),
             leading: BackButtonV2(
-                // onPressed: () {
-                //   showAppDialog(
-                //     context: context,
-                //     builder: (context) {
-                //       return dialog(context,
-                //           title: Text('提示'),
-                //           content: Text('确认删除吗？'),
-                //           actions: [
-                //             dialogAction(context, "cc", onPressed: () {
-                //               // showGlobalDialog();
-                //               BoostNavigator.instance.push("/test_page",
-                //                   withContainer: true,
+              onPressed: () {
+                showAppDialog(
+                  context: context,
+                  builder: (context) {
+                    return dialog(context,
+                        title: Text('提示'),
+                        content: Text('确认删除吗？'),
+                        actions: [
+                          dialogAction(context, "cc", onPressed: () {
+                            // showGlobalDialog();
+                            BoostNavigator.instance.push("/test_page",
+                                withContainer: true,
 
-                //                   ///如果开启新容器，需要指定opaque为false
-                //                   opaque: false);
-                //             }),
-                //             dialogAction(context, "cc1", onPressed: () {
-                //               Navigator.of(context).pop('ok');
-                //             }),
-                //           ]);
-                //     },
-                //   );
-                // },
-                ),
+                                ///如果开启新容器，需要指定opaque为false
+                                opaque: false);
+                          }),
+                          dialogAction(context, "cc1", onPressed: () {
+                            Navigator.of(context).pop('ok');
+                          }),
+                        ]);
+                  },
+                );
+              },
+            ),
           ),
         ),
         body: Consumer(builder: (context, watch, _) {
