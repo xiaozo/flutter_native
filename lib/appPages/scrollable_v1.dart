@@ -24,17 +24,6 @@ class VerticalDragGestureRecognizerV1 extends VerticalDragGestureRecognizer {
   }) : super(debugOwner: debugOwner, kind: kind);
 
   @override
-  void acceptGesture(int pointer) {
-    print("acceptGesture");
-    super.acceptGesture(pointer);
-  }
-
-  @override
-  void addAllowedPointer(PointerEvent event) {
-    super.addAllowedPointer(event);
-  }
-
-  @override
   void handleEvent(PointerEvent event) {
     if (event.delta.dy > 0) {
       resolve(GestureDisposition.rejected);
