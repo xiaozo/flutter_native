@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_deerclass/event/event_bus.dart';
 
 export 'package:flutter/physics.dart' show Tolerance;
 
@@ -29,20 +30,18 @@ class VerticalDragGestureRecognizer1 extends VerticalDragGestureRecognizer {
   }
 
   @override
+  void addAllowedPointer(PointerEvent event) {
+    super.addAllowedPointer(event);
+  }
+
+  @override
   void handleEvent(PointerEvent event) {
-    //
-    // return;
-    // super.handleEvent(event);
     if (event.delta.dy > 0) {
+      resolve(GestureDisposition.rejected);
+      EventBus.instance.emit("event", {"dy": event.delta.dy});
+    } else if (event.delta.dy < 0) {
       resolve(GestureDisposition.accepted);
       super.handleEvent(event);
-      // stopTrackingPointer(event.pointer);
-      print("c:" + event.toString());
-    } else if (event.delta.dy < 0) {
-      resolve(GestureDisposition.rejected);
-      // stopTrackingPointer(event.pointer);
-      // super.handleEvent(event);
-      print(event.toString());
     }
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_deerclass/event/event_bus.dart';
 import 'package:flutter_deerclass/net/request_model/page.dart';
 import 'package:flutter_deerclass/net/request_model/user_order_list_params.dart';
 import 'package:flutter_deerclass/ui/loading_dialog.dart';
@@ -93,15 +94,32 @@ class _TestPageState extends State<TestPage> {
 
   late RefreshBasePageController _refreshController;
 
+  ScrollController _scrollController1 =
+      new ScrollController(keepScrollOffset: true);
+  ScrollController _scrollController2 =
+      new ScrollController(keepScrollOffset: true);
+
   @override
   void initState() {
+    // _scrollController2.addListener(() {
+    //   print(_scrollController1.offset.toString());
+    // });
+
+    _scrollController1.addListener(() {});
+
+    EventBus.instance.on("event", (arg) {
+      if (_scrollController1.offset <= 0) return;
+
+      _scrollController1
+          .jumpTo(_scrollController1.offset - (arg["dy"] as double));
+    });
     _typeConditions.add(SortCondition(name: '全部', keys: "0", isSelected: true));
-    _typeConditions
-        .add(SortCondition(name: '待付款', keys: "1", isSelected: false));
-    _typeConditions
-        .add(SortCondition(name: '已完成', keys: "2", isSelected: false));
-    _typeConditions
-        .add(SortCondition(name: '已取消', keys: "3", isSelected: false));
+    // _typeConditions
+    //     .add(SortCondition(name: '待付款', keys: "1", isSelected: false));
+    // _typeConditions
+    //     .add(SortCondition(name: '已完成', keys: "2", isSelected: false));
+    // _typeConditions
+    //     .add(SortCondition(name: '已取消', keys: "3", isSelected: false));
 
     _currentSortCondition = _typeConditions.first;
 
@@ -130,15 +148,7 @@ class _TestPageState extends State<TestPage> {
 
   Widget _buildConditionListWidget(
       void itemOnTap(SortCondition sortCondition)) {
-    return RawGestureDetector(
-      gestures: <Type, GestureRecognizerFactory>{
-        _SingleTouchRecognizer:
-            GestureRecognizerFactoryWithHandlers<_SingleTouchRecognizer>(
-          () => _SingleTouchRecognizer(),
-          (_SingleTouchRecognizer instance) {},
-        ),
-      },
-      child: ListView.separated(
+    return ListView.separated(
         shrinkWrap: true,
         scrollDirection: Axis.vertical,
         itemCount: _typeConditions.length,
@@ -150,35 +160,39 @@ class _TestPageState extends State<TestPage> {
           // return gestureDetector(index, itemOnTap, context);
           String str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
           return Container(
-            height: 100,
-            child: SingleChildScrollView1(
-              padding: EdgeInsets.all(16.0),
-              child: Container(
-                padding: EdgeInsets.all(16.0),
-                height: 200,
-                color: Colors.red,
+              height: 100,
+              child: Listener(
+                onPointerUp: (event) {
+                  print("手指抬起:$event");
+                },
                 child: SingleChildScrollView(
+                  controller: _scrollController1,
                   padding: EdgeInsets.all(16.0),
-                  child: Center(
-                    child: Column(
-                      //动态创建一个List<Widget>
-                      children: str
-                          .split("")
-                          //每一个字母都用一个Text显示,字体为原来的两倍
-                          .map((c) => Text(
-                                c,
-                                textScaleFactor: 2.0,
-                              ))
-                          .toList(),
+                  child: Container(
+                    padding: EdgeInsets.all(16.0),
+                    height: 200,
+                    color: Colors.red,
+                    child: SingleChildScrollView1(
+                      controller: _scrollController2,
+                      padding: EdgeInsets.all(16.0),
+                      child: Center(
+                        child: Column(
+                          //动态创建一个List<Widget>
+                          children: str
+                              .split("")
+                              //每一个字母都用一个Text显示,字体为原来的两倍
+                              .map((c) => Text(
+                                    c,
+                                    textScaleFactor: 2.0,
+                                  ))
+                              .toList(),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
+              ));
+        });
   }
 
   GestureDetector gestureDetector(int index,
@@ -503,7 +517,7 @@ class _TestPageState extends State<TestPage> {
               controller: _controller,
               menus: [
                 GZXDropdownMenuBuilder(
-                    dropDownHeight: 45.as * _typeConditions.length,
+                    dropDownHeight: 200.as,
                     dropDownWidget: _buildConditionListWidget((value) {
                       _controller.hide();
                       setState(() {
