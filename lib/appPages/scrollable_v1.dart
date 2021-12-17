@@ -14,11 +14,11 @@ import 'package:flutter_deerclass/event/event_bus.dart';
 
 export 'package:flutter/physics.dart' show Tolerance;
 
-class VerticalDragGestureRecognizer1 extends VerticalDragGestureRecognizer {
+class VerticalDragGestureRecognizerV1 extends VerticalDragGestureRecognizer {
   /// Create a gesture recognizer for interactions in the vertical axis.
   ///
   /// {@macro flutter.gestures.GestureRecognizer.kind}
-  VerticalDragGestureRecognizer1({
+  VerticalDragGestureRecognizerV1({
     Object? debugOwner,
     PointerDeviceKind? kind,
   }) : super(debugOwner: debugOwner, kind: kind);
@@ -92,11 +92,11 @@ typedef ViewportBuilder = Widget Function(
 ///    child.
 ///  * [ScrollNotification] and [NotificationListener], which can be used to watch
 ///    the scroll position without using a [ScrollController].
-class Scrollable1 extends StatefulWidget {
+class ScrollableV1 extends StatefulWidget {
   /// Creates a widget that scrolls.
   ///
   /// The [axisDirection] and [viewportBuilder] arguments must not be null.
-  const Scrollable1({
+  const ScrollableV1({
     Key? key,
     this.axisDirection = AxisDirection.down,
     this.controller,
@@ -333,7 +333,7 @@ class Scrollable1 extends StatefulWidget {
     // the `targetRenderObject` invisible.
     // Also see https://github.com/flutter/flutter/issues/65100
     RenderObject? targetRenderObject;
-    ScrollableState? scrollable = Scrollable1.of(context);
+    ScrollableState? scrollable = ScrollableV1.of(context);
     while (scrollable != null) {
       futures.add(scrollable.position.ensureVisible(
         context.findRenderObject()!,
@@ -346,7 +346,7 @@ class Scrollable1 extends StatefulWidget {
 
       targetRenderObject = targetRenderObject ?? context.findRenderObject();
       context = scrollable.context;
-      scrollable = Scrollable1.of(context);
+      scrollable = ScrollableV1.of(context);
     }
 
     if (futures.isEmpty || duration == Duration.zero)
@@ -387,7 +387,7 @@ class _ScrollableScope extends InheritedWidget {
 ///
 /// This class is not intended to be subclassed. To specialize the behavior of a
 /// [Scrollable], provide it with a [ScrollPhysics].
-class ScrollableState extends State<Scrollable1>
+class ScrollableState extends State<ScrollableV1>
     with TickerProviderStateMixin, RestorationMixin
     implements ScrollContext {
   /// The manager for this [Scrollable] widget's viewport position.
@@ -455,7 +455,7 @@ class ScrollableState extends State<Scrollable1>
     super.didChangeDependencies();
   }
 
-  bool _shouldUpdatePosition(Scrollable1 oldWidget) {
+  bool _shouldUpdatePosition(ScrollableV1 oldWidget) {
     ScrollPhysics? newPhysics = widget.physics;
     ScrollPhysics? oldPhysics = oldWidget.physics;
     do {
@@ -468,7 +468,7 @@ class ScrollableState extends State<Scrollable1>
   }
 
   @override
-  void didUpdateWidget(Scrollable1 oldWidget) {
+  void didUpdateWidget(ScrollableV1 oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (widget.controller != oldWidget.controller) {
@@ -527,11 +527,11 @@ class ScrollableState extends State<Scrollable1>
       switch (widget.axis) {
         case Axis.vertical:
           _gestureRecognizers = <Type, GestureRecognizerFactory>{
-            VerticalDragGestureRecognizer1:
+            VerticalDragGestureRecognizerV1:
                 GestureRecognizerFactoryWithHandlers<
-                    VerticalDragGestureRecognizer1>(
-              () => VerticalDragGestureRecognizer1(),
-              (VerticalDragGestureRecognizer1 instance) {
+                    VerticalDragGestureRecognizerV1>(
+              () => VerticalDragGestureRecognizerV1(),
+              (VerticalDragGestureRecognizerV1 instance) {
                 instance
                   ..onDown = _handleDragDown
                   ..onStart = _handleDragStart

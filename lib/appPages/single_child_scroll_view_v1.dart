@@ -7,7 +7,7 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/gestures.dart' show DragStartBehavior;
-import 'package:flutter_deerclass/appPages/custom_test2.dart';
+import 'package:flutter_deerclass/appPages/scrollable_v1.dart';
 
 /// A box in which a single widget can be scrolled.
 ///
@@ -202,9 +202,9 @@ import 'package:flutter_deerclass/appPages/custom_test2.dart';
 ///  * [GridView], which handles multiple children in a scrolling grid.
 ///  * [PageView], for a scrollable that works page by page.
 ///  * [Scrollable], which handles arbitrary scrolling effects.
-class SingleChildScrollView1 extends StatelessWidget {
+class SingleChildScrollViewV1 extends StatelessWidget {
   /// Creates a box in which a single widget can be scrolled.
-  const SingleChildScrollView1({
+  const SingleChildScrollViewV1({
     Key? key,
     this.scrollDirection = Axis.vertical,
     this.reverse = false,
@@ -314,7 +314,7 @@ class SingleChildScrollView1 extends StatelessWidget {
     if (padding != null) contents = Padding(padding: padding!, child: contents);
     final ScrollController? scrollController =
         primary ? PrimaryScrollController.of(context) : controller;
-    final Scrollable1 scrollable = Scrollable1(
+    final ScrollableV1 scrollable = ScrollableV1(
       dragStartBehavior: dragStartBehavior,
       axisDirection: axisDirection,
       controller: scrollController,
