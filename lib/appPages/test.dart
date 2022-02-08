@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_deerclass/appPages/single_child_scroll_view_v1.dart';
 import 'package:flutter_deerclass/event/event_bus.dart';
 import 'package:flutter_deerclass/net/request_model/page.dart';
 import 'package:flutter_deerclass/net/request_model/user_order_list_params.dart';
@@ -28,17 +27,12 @@ import 'package:flutter_boost/flutter_boost.dart';
 
 class _SingleTouchRecognizer extends OneSequenceGestureRecognizer {
   bool scrollEnabled = false;
-
-  _SingleTouchRecognizer();
+  final ScrollController s;
+  _SingleTouchRecognizer(this.s);
 
   @override
   void addPointer(PointerEvent event) {
     startTrackingPointer(event.pointer);
-  }
-
-  @override
-  void acceptGesture(int pointer) {
-    print("object");
   }
 
   @override
@@ -49,7 +43,14 @@ class _SingleTouchRecognizer extends OneSequenceGestureRecognizer {
 
   @override
   void handleEvent(PointerEvent event) {
-    resolve(GestureDisposition.rejected);
+    if (s.offset > 0) {
+      if (event.delta.dy > 0) {
+        resolve(GestureDisposition.accepted);
+        EventBus.instance.emit("event", {"dy": event.delta.dy});
+      } else if (event.delta.dy < 0) {
+        resolve(GestureDisposition.rejected);
+      }
+    }
   }
 }
 
@@ -162,36 +163,45 @@ class _TestPageState extends State<TestPage> {
           return Container(
               height: 100,
               child: Listener(
-                onPointerUp: (event) {
-                  print("手指抬起:$event");
-                },
-                child: SingleChildScrollView(
-                  controller: _scrollController1,
-                  padding: EdgeInsets.all(16.0),
-                  child: Container(
+                  onPointerUp: (event) {
+                    // print("手指抬起:$event");
+                  },
+                  child: SingleChildScrollView(
+                    controller: _scrollController1,
                     padding: EdgeInsets.all(16.0),
-                    height: 200,
-                    color: Colors.red,
-                    child: SingleChildScrollViewV1(
-                      controller: _scrollController2,
+                    child: Container(
                       padding: EdgeInsets.all(16.0),
-                      child: Center(
-                        child: Column(
-                          //动态创建一个List<Widget>
-                          children: str
-                              .split("")
-                              //每一个字母都用一个Text显示,字体为原来的两倍
-                              .map((c) => Text(
-                                    c,
-                                    textScaleFactor: 2.0,
-                                  ))
-                              .toList(),
+                      height: 200,
+                      color: Colors.red,
+                      child: RawGestureDetector(
+                        gestures: <Type, GestureRecognizerFactory>{
+                          _SingleTouchRecognizer:
+                              GestureRecognizerFactoryWithHandlers<
+                                  _SingleTouchRecognizer>(
+                            () => _SingleTouchRecognizer(_scrollController1),
+                            (_SingleTouchRecognizer instance) {},
+                          ),
+                        },
+                        child: SingleChildScrollView(
+                          controller: _scrollController2,
+                          padding: EdgeInsets.all(16.0),
+                          child: Center(
+                            child: Column(
+                              //动态创建一个List<Widget>
+                              children: str
+                                  .split("")
+                                  //每一个字母都用一个Text显示,字体为原来的两倍
+                                  .map((c) => Text(
+                                        c,
+                                        textScaleFactor: 2.0,
+                                      ))
+                                  .toList(),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-              ));
+                  )));
         });
   }
 
